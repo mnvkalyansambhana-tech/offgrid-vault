@@ -1,0 +1,482 @@
+{
+ "v": 3,
+ "attachments": {},
+ "boards": {
+  "AutofillLocked.dc.html": {
+   "h": 844,
+   "page": "wire",
+   "radius": 28,
+   "title": "17 · Autofill — vault locked",
+   "w": 390,
+   "x": 0,
+   "y": 3900
+  },
+  "AutofillMatch.dc.html": {
+   "h": 844,
+   "page": "wire",
+   "radius": 28,
+   "title": "18 · Autofill — matches",
+   "w": 390,
+   "x": 470,
+   "y": 3900
+  },
+  "AutofillNoMatch.dc.html": {
+   "h": 844,
+   "page": "wire",
+   "radius": 28,
+   "title": "19 · Autofill — no match, link app",
+   "w": 390,
+   "x": 940,
+   "y": 3900
+  },
+  "AutofillSave.dc.html": {
+   "h": 844,
+   "page": "wire",
+   "radius": 28,
+   "title": "20 · Autofill — save new login",
+   "w": 390,
+   "x": 1410,
+   "y": 3900
+  },
+  "DeleteConfirm.dc.html": {
+   "h": 844,
+   "page": "wire",
+   "radius": 28,
+   "title": "15 · Delete entry",
+   "w": 390,
+   "x": 1880,
+   "y": 2600
+  },
+  "EntryDetail.dc.html": {
+   "h": 844,
+   "page": "wire",
+   "radius": 28,
+   "title": "12 · Entry detail",
+   "w": 390,
+   "x": 470,
+   "y": 2600
+  },
+  "EntryEdit.dc.html": {
+   "h": 844,
+   "page": "wire",
+   "radius": 28,
+   "title": "13 · Add / edit entry",
+   "w": 390,
+   "x": 940,
+   "y": 2600
+  },
+  "Generator.dc.html": {
+   "h": 844,
+   "page": "wire",
+   "radius": 28,
+   "title": "14 · Password generator",
+   "w": 390,
+   "x": 1410,
+   "y": 2600
+  },
+  "LockedOut.dc.html": {
+   "h": 844,
+   "page": "wire",
+   "radius": 28,
+   "title": "9 · Locked out",
+   "w": 390,
+   "x": 940,
+   "y": 1300
+  },
+  "Main.dc.html": {
+   "h": 844,
+   "page": "wire",
+   "radius": 28,
+   "title": "1 · Welcome",
+   "w": 390,
+   "x": 0,
+   "y": 0
+  },
+  "RecoveryConfirm.dc.html": {
+   "h": 844,
+   "page": "wire",
+   "radius": 28,
+   "title": "5 · Type-back check",
+   "w": 390,
+   "x": 1880,
+   "y": 0
+  },
+  "RecoveryEntry.dc.html": {
+   "h": 844,
+   "page": "wire",
+   "radius": 28,
+   "title": "10 · Enter recovery words",
+   "w": 390,
+   "x": 1410,
+   "y": 1300
+  },
+  "RecoveryIntro.dc.html": {
+   "h": 844,
+   "page": "wire",
+   "radius": 28,
+   "title": "3 · Recovery intro",
+   "w": 390,
+   "x": 940,
+   "y": 0
+  },
+  "RecoveryLimits.dc.html": {
+   "h": 844,
+   "page": "wire",
+   "radius": 28,
+   "title": "6 · What words can / can't do",
+   "w": 390,
+   "x": 2350,
+   "y": 0
+  },
+  "RecoveryWords.dc.html": {
+   "h": 844,
+   "page": "wire",
+   "radius": 28,
+   "title": "4 · Recovery words",
+   "w": 390,
+   "x": 1410,
+   "y": 0
+  },
+  "Settings.dc.html": {
+   "h": 844,
+   "page": "wire",
+   "radius": 28,
+   "title": "16 · Settings",
+   "w": 390,
+   "x": 2350,
+   "y": 2600
+  },
+  "SetupPin.dc.html": {
+   "h": 844,
+   "page": "wire",
+   "radius": 28,
+   "title": "2 · Create PIN",
+   "w": 390,
+   "x": 470,
+   "y": 0
+  },
+  "Unlock.dc.html": {
+   "h": 844,
+   "page": "wire",
+   "radius": 28,
+   "title": "7 · Unlock",
+   "w": 390,
+   "x": 0,
+   "y": 1300
+  },
+  "UnlockWrong.dc.html": {
+   "h": 844,
+   "page": "wire",
+   "radius": 28,
+   "title": "8 · Wrong PIN",
+   "w": 390,
+   "x": 470,
+   "y": 1300
+  },
+  "VaultList.dc.html": {
+   "h": 844,
+   "page": "wire",
+   "radius": 28,
+   "title": "11 · Vault list",
+   "w": 390,
+   "x": 0,
+   "y": 2600
+  },
+  "PopWelcome.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "title": "Pop · Welcome",
+   "page": "pop"
+  },
+  "PopSetupPin.dc.html": {
+   "x": 470,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "title": "Pop · Create PIN",
+   "page": "pop"
+  },
+  "PopRecoveryIntro.dc.html": {
+   "x": 940,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "title": "Pop · Recovery intro",
+   "page": "pop"
+  },
+  "PopRecoveryWords.dc.html": {
+   "x": 1410,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "title": "Pop · Recovery words",
+   "page": "pop"
+  },
+  "PopRecoveryConfirm.dc.html": {
+   "x": 1880,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "title": "Pop · Type-back check",
+   "page": "pop"
+  },
+  "PopRecoveryLimits.dc.html": {
+   "x": 2350,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "title": "Pop · Words can / can't",
+   "page": "pop"
+  },
+  "PopUnlock.dc.html": {
+   "x": 0,
+   "y": 1300,
+   "w": 390,
+   "h": 844,
+   "title": "Pop · Unlock",
+   "page": "pop"
+  },
+  "PopUnlockWrong.dc.html": {
+   "x": 470,
+   "y": 1300,
+   "w": 390,
+   "h": 844,
+   "title": "Pop · Wrong PIN",
+   "page": "pop"
+  },
+  "PopLockedOut.dc.html": {
+   "x": 940,
+   "y": 1300,
+   "w": 390,
+   "h": 844,
+   "title": "Pop · Locked out",
+   "page": "pop"
+  },
+  "PopRecoveryEntry.dc.html": {
+   "x": 1410,
+   "y": 1300,
+   "w": 390,
+   "h": 844,
+   "title": "Pop · Enter recovery words",
+   "page": "pop"
+  },
+  "PopVaultList.dc.html": {
+   "x": 0,
+   "y": 2600,
+   "w": 390,
+   "h": 844,
+   "title": "Pop · Vault list",
+   "page": "pop"
+  },
+  "PopEntryDetail.dc.html": {
+   "x": 470,
+   "y": 2600,
+   "w": 390,
+   "h": 844,
+   "title": "Pop · Entry detail",
+   "page": "pop"
+  },
+  "PopEntryEdit.dc.html": {
+   "x": 940,
+   "y": 2600,
+   "w": 390,
+   "h": 844,
+   "title": "Pop · Edit entry",
+   "page": "pop"
+  },
+  "PopGenerator.dc.html": {
+   "x": 1410,
+   "y": 2600,
+   "w": 390,
+   "h": 844,
+   "title": "Pop · Generator",
+   "page": "pop"
+  },
+  "PopDeleteConfirm.dc.html": {
+   "x": 1880,
+   "y": 2600,
+   "w": 390,
+   "h": 844,
+   "title": "Pop · Delete",
+   "page": "pop"
+  },
+  "PopSettings.dc.html": {
+   "x": 2350,
+   "y": 2600,
+   "w": 390,
+   "h": 844,
+   "title": "Pop · Settings",
+   "page": "pop"
+  },
+  "PopAutofillLocked.dc.html": {
+   "x": 0,
+   "y": 3900,
+   "w": 390,
+   "h": 844,
+   "title": "Pop · Autofill — locked",
+   "page": "pop"
+  },
+  "PopAutofillMatch.dc.html": {
+   "x": 470,
+   "y": 3900,
+   "w": 390,
+   "h": 844,
+   "title": "Pop · Autofill — matches",
+   "page": "pop"
+  },
+  "PopAutofillNoMatch.dc.html": {
+   "x": 940,
+   "y": 3900,
+   "w": 390,
+   "h": 844,
+   "title": "Pop · Autofill — link app",
+   "page": "pop"
+  },
+  "PopAutofillSave.dc.html": {
+   "x": 1410,
+   "y": 3900,
+   "w": 390,
+   "h": 844,
+   "title": "Pop · Autofill — save",
+   "page": "pop"
+  }
+ },
+ "createdOnFiles": {
+  "at": "2026-10-02T10:00:00Z",
+  "v": 1
+ },
+ "designSystems": [],
+ "launch": {
+  "page": "pop",
+  "view": "canvas"
+ },
+ "notes": {
+  "rowAutofill": {
+   "kind": "title1",
+   "maxW": 2740,
+   "page": "wire",
+   "text": "Autofill (inside other apps)",
+   "w": 240,
+   "x": 0,
+   "y": 3600
+  },
+  "rowSetup": {
+   "kind": "title1",
+   "maxW": 2740,
+   "page": "wire",
+   "text": "Setup — first run",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "rowUnlock": {
+   "kind": "title1",
+   "maxW": 2740,
+   "page": "wire",
+   "text": "Unlock, lockout & recovery",
+   "w": 240,
+   "x": 0,
+   "y": 1000
+  },
+  "rowVault": {
+   "kind": "title1",
+   "maxW": 2740,
+   "page": "wire",
+   "text": "Vault",
+   "w": 240,
+   "x": 0,
+   "y": 2300
+  },
+  "popRow0": {
+   "kind": "title1",
+   "maxW": 2740,
+   "text": "Pop direction — setup",
+   "w": 240,
+   "x": 0,
+   "y": -300,
+   "page": "pop"
+  },
+  "popRow1": {
+   "kind": "title1",
+   "maxW": 2740,
+   "text": "Pop direction — unlock & lockout",
+   "w": 240,
+   "x": 0,
+   "y": 1000,
+   "page": "pop"
+  },
+  "popRow2": {
+   "kind": "title1",
+   "maxW": 2740,
+   "text": "Pop direction — vault",
+   "w": 240,
+   "x": 0,
+   "y": 2300,
+   "page": "pop"
+  },
+  "popRow3": {
+   "kind": "title1",
+   "maxW": 2740,
+   "text": "Pop direction — autofill",
+   "w": 240,
+   "x": 0,
+   "y": 3600,
+   "page": "pop"
+  }
+ },
+ "order": [
+  "Main.dc.html",
+  "SetupPin.dc.html",
+  "RecoveryIntro.dc.html",
+  "RecoveryWords.dc.html",
+  "RecoveryConfirm.dc.html",
+  "RecoveryLimits.dc.html",
+  "Unlock.dc.html",
+  "UnlockWrong.dc.html",
+  "LockedOut.dc.html",
+  "RecoveryEntry.dc.html",
+  "VaultList.dc.html",
+  "EntryDetail.dc.html",
+  "EntryEdit.dc.html",
+  "Generator.dc.html",
+  "DeleteConfirm.dc.html",
+  "Settings.dc.html",
+  "AutofillLocked.dc.html",
+  "AutofillMatch.dc.html",
+  "AutofillNoMatch.dc.html",
+  "AutofillSave.dc.html",
+  "PopWelcome.dc.html",
+  "PopSetupPin.dc.html",
+  "PopRecoveryIntro.dc.html",
+  "PopRecoveryWords.dc.html",
+  "PopRecoveryConfirm.dc.html",
+  "PopRecoveryLimits.dc.html",
+  "PopUnlock.dc.html",
+  "PopUnlockWrong.dc.html",
+  "PopLockedOut.dc.html",
+  "PopRecoveryEntry.dc.html",
+  "PopVaultList.dc.html",
+  "PopEntryDetail.dc.html",
+  "PopEntryEdit.dc.html",
+  "PopGenerator.dc.html",
+  "PopDeleteConfirm.dc.html",
+  "PopSettings.dc.html",
+  "PopAutofillLocked.dc.html",
+  "PopAutofillMatch.dc.html",
+  "PopAutofillNoMatch.dc.html",
+  "PopAutofillSave.dc.html"
+ ],
+ "pages": [
+  {
+   "id": "wire",
+   "name": "Wireframes"
+  },
+  {
+   "id": "pop",
+   "name": "Pop direction"
+  }
+ ],
+ "title": "OffGrid Vault Wireframes"
+}

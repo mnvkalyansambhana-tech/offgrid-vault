@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Autofill save new login</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#1F5F4A}a:hover{color:#163F32}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #7E828A; color: #1C1C1C; font-family: 'IBM Plex Sans', system-ui, sans-serif; display: flex; flex-direction: column; justify-content: flex-end">
+<div style="flex-grow: 1; padding: 48px 24px; display: flex; flex-direction: column; gap: 10px; color: #F2F3F5">
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 1px">ANOTHER APP (dimmed)</span>
+<span style="font-size: 20px; font-weight: 600">Welcome back</span>
+</div>
+<div role="dialog" aria-label="Save to OffGrid Vault" style="background: #FFFFFF; border-radius: 24px 24px 0 0; padding: 24px 20px 28px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; gap: 12px; align-items: center">
+<div style="width: 40px; height: 40px; border-radius: 12px; background: #1F5F4A; color: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></div>
+<h2 style="margin: 0; font-size: 19px; font-weight: 600">Save to OffGrid Vault?</h2>
+</div>
+<div style="background: #F6F6F2; border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 14px">
+<span><strong>[Example App]</strong> · [user@example.com]</span>
+<span style="color: #5E5E58">Password ••••••••••</span>
+</div>
+<p style="margin: 0; font-size: 13px; color: #5E5E58; line-height: 1.4">If this login already exists, the old password moves to its history.</p>
+<div style="display: flex; gap: 10px; justify-content: flex-end">
+<button style="min-height: 48px; padding: 0 18px; border-radius: 10px; border: 1.5px solid #BDBDB4; background: transparent; color: #1C1C1C; font: 600 15px 'IBM Plex Sans', sans-serif">Not now</button>
+<button style="min-height: 48px; padding: 0 22px; border-radius: 10px; border: 0; background: #1F5F4A; color: #FFFFFF; font: 600 15px 'IBM Plex Sans', sans-serif">Save</button>
+</div>
+<p style="margin: 0; font-size: 12px; color: #5E5E58; text-align: center">Vault locked? You'll unlock with PIN or fingerprint first.</p>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

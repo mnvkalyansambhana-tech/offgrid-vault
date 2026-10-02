@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Add or edit entry</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#1F5F4A}a:hover{color:#163F32}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F6F6F2; color: #1C1C1C; font-family: 'IBM Plex Sans', system-ui, sans-serif; display: flex; flex-direction: column">
+<div style="height: 56px; flex-shrink: 0; display: flex; align-items: center; gap: 4px; padding: 0 8px; border-bottom: 1px solid #D6D6CF">
+<button aria-label="Discard" style="width: 44px; height: 44px; border: 0; background: transparent; color: #1C1C1C; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+<span style="font-size: 18px; font-weight: 600; flex-grow: 1">Edit entry</span>
+<button style="height: 40px; padding: 0 16px; border-radius: 10px; border: 0; background: #1F5F4A; color: #FFFFFF; font: 600 15px 'IBM Plex Sans', sans-serif">Save</button>
+</div>
+<div style="padding: 20px 20px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="t" style="font-size: 13px; font-weight: 500; color: #4A4A45">Title</label><input id="t" type="text" value="GitHub" style="height: 48px; border: 1.5px solid #BDBDB4; border-radius: 10px; padding: 0 14px; font: 400 16px 'IBM Plex Sans', sans-serif; background: #FFFFFF"></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="u" style="font-size: 13px; font-weight: 500; color: #4A4A45">Username</label><input id="u" type="text" value="[dev@example.com]" style="height: 48px; border: 1.5px solid #BDBDB4; border-radius: 10px; padding: 0 14px; font: 400 16px 'IBM Plex Sans', sans-serif; background: #FFFFFF"></div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="p" style="font-size: 13px; font-weight: 500; color: #4A4A45">Password</label>
+<div style="display: flex; gap: 8px">
+<input id="p" type="password" value="passwordvalue" style="min-width: 0; flex-grow: 1; height: 48px; border: 1.5px solid #BDBDB4; border-radius: 10px; padding: 0 14px; font: 400 16px 'IBM Plex Mono', monospace; background: #FFFFFF">
+<button style="height: 48px; padding: 0 14px; border-radius: 10px; border: 1.5px solid #1F5F4A; background: #FFFFFF; color: #1F5F4A; font: 600 14px 'IBM Plex Sans', sans-serif; display: flex; align-items: center; gap: 6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"></path><path d="M20 4v5h-5"></path></svg>Generate</button>
+</div>
+<span style="font-size: 12px; color: #5E5E58">Changing it moves the old one to history</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="w" style="font-size: 13px; font-weight: 500; color: #4A4A45">Websites</label><input id="w" type="text" value="github.com" style="height: 48px; border: 1.5px solid #BDBDB4; border-radius: 10px; padding: 0 14px; font: 400 16px 'IBM Plex Sans', sans-serif; background: #FFFFFF"><a href="#" style="font-size: 14px; font-weight: 500; padding: 6px 0">+ Add website</a></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; font-weight: 500; color: #4A4A45">Linked apps</span><div style="display: flex; align-items: center; justify-content: space-between; background: #FFFFFF; border: 1px solid #D6D6CF; border-radius: 10px; padding: 4px 4px 4px 14px; font-size: 15px"><span>[GitHub app]</span><button aria-label="Unlink app" style="width: 44px; height: 44px; border: 0; background: transparent; color: #5E5E58; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></div></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="n" style="font-size: 13px; font-weight: 500; color: #4A4A45">Notes</label><textarea id="n" rows="3" style="border: 1.5px solid #BDBDB4; border-radius: 10px; padding: 12px 14px; font: 400 15px 'IBM Plex Sans', sans-serif; background: #FFFFFF; resize: none"></textarea></div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Create PIN</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#1F5F4A}a:hover{color:#163F32}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F6F6F2; color: #1C1C1C; font-family: 'IBM Plex Sans', system-ui, sans-serif; display: flex; flex-direction: column">
+<div style="height: 56px; flex-shrink: 0; display: flex; align-items: center; gap: 8px; padding: 0 8px; border-bottom: 1px solid #D6D6CF">
+<button aria-label="Back" style="width: 44px; height: 44px; border: 0; background: transparent; color: #1C1C1C; display: flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg></button>
+<span style="font-size: 18px; font-weight: 600">Create PIN</span>
+</div>
+<div style="flex-grow: 1; padding: 28px 24px 24px; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; flex-direction: column; gap: 6px; text-align: center">
+<h2 style="margin: 0; font-size: 22px; font-weight: 600">Choose a 6-digit PIN</h2>
+<p style="margin: 0; font-size: 14px; color: #5E5E58; line-height: 1.45">Use a different PIN from your phone's screen lock.</p>
+</div>
+<div style="display: flex; gap: 16px; justify-content: center; padding: 8px 0">
+<span style="width: 14px; height: 14px; border-radius: 50%; box-sizing: border-box; border: 2px solid #1C1C1C; background: #1C1C1C"></span>
+<span style="width: 14px; height: 14px; border-radius: 50%; box-sizing: border-box; border: 2px solid #1C1C1C; background: #1C1C1C"></span>
+<span style="width: 14px; height: 14px; border-radius: 50%; box-sizing: border-box; border: 2px solid #1C1C1C; background: #1C1C1C"></span>
+<span style="width: 14px; height: 14px; border-radius: 50%; box-sizing: border-box; border: 2px solid #1C1C1C; background: #1C1C1C"></span>
+<span style="width: 14px; height: 14px; border-radius: 50%; box-sizing: border-box; border: 2px solid #1C1C1C; background: #1C1C1C"></span>
+<span style="width: 14px; height: 14px; border-radius: 50%; box-sizing: border-box; border: 2px solid #1C1C1C; background: #1C1C1C"></span>
+</div>
+<div role="alert" style="background: #FBEDEA; color: #8A2B19; border-radius: 10px; padding: 12px 14px; font-size: 14px; line-height: 1.4; text-align: center">Too easy to guess — avoid repeats, runs like 123456 and common PINs.</div>
+<div style="margin-top: auto; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px">
+<button style="height: 60px; border-radius: 14px; border: 1px solid #D6D6CF; background: #FFFFFF; font: 500 24px 'IBM Plex Sans', sans-serif; color: #1C1C1C">1</button>
+<button style="height: 60px; border-radius: 14px; border: 1px solid #D6D6CF; background: #FFFFFF; font: 500 24px 'IBM Plex Sans', sans-serif; color: #1C1C1C">2</button>
+<button style="height: 60px; border-radius: 14px; border: 1px solid #D6D6CF; background: #FFFFFF; font: 500 24px 'IBM Plex Sans', sans-serif; color: #1C1C1C">3</button>
+<button style="height: 60px; border-radius: 14px; border: 1px solid #D6D6CF; background: #FFFFFF; font: 500 24px 'IBM Plex Sans', sans-serif; color: #1C1C1C">4</button>
+<button style="height: 60px; border-radius: 14px; border: 1px solid #D6D6CF; background: #FFFFFF; font: 500 24px 'IBM Plex Sans', sans-serif; color: #1C1C1C">5</button>
+<button style="height: 60px; border-radius: 14px; border: 1px solid #D6D6CF; background: #FFFFFF; font: 500 24px 'IBM Plex Sans', sans-serif; color: #1C1C1C">6</button>
+<button style="height: 60px; border-radius: 14px; border: 1px solid #D6D6CF; background: #FFFFFF; font: 500 24px 'IBM Plex Sans', sans-serif; color: #1C1C1C">7</button>
+<button style="height: 60px; border-radius: 14px; border: 1px solid #D6D6CF; background: #FFFFFF; font: 500 24px 'IBM Plex Sans', sans-serif; color: #1C1C1C">8</button>
+<button style="height: 60px; border-radius: 14px; border: 1px solid #D6D6CF; background: #FFFFFF; font: 500 24px 'IBM Plex Sans', sans-serif; color: #1C1C1C">9</button>
+<span></span>
+<button style="height: 60px; border-radius: 14px; border: 1px solid #D6D6CF; background: #FFFFFF; font: 500 24px 'IBM Plex Sans', sans-serif; color: #1C1C1C">0</button>
+<button aria-label="Delete digit" style="height: 60px; border-radius: 14px; border: 0; background: transparent; color: #1C1C1C; display: flex; align-items: center; justify-content: center"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5H9l-6 7 6 7h12z"></path><path d="M12 9l6 6M18 9l-6 6"></path></svg></button>
+</div>
+<p style="margin: 0; font-size: 12px; color: #5E5E58; text-align: center">In-app keypad — your keyboard never sees the PIN</p>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>What recovery words can and can't do</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#1F5F4A}a:hover{color:#163F32}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F6F6F2; color: #1C1C1C; font-family: 'IBM Plex Sans', system-ui, sans-serif; display: flex; flex-direction: column; padding: 48px 24px 32px; gap: 22px">
+<h1 style="margin: 0; font-size: 26px; font-weight: 600">Know this before you continue</h1>
+<div style="display: flex; flex-direction: column; gap: 12px; font-size: 15px; line-height: 1.45">
+<div style="display: flex; gap: 12px; background: #FFFFFF; border: 1px solid #D6D6CF; border-radius: 12px; padding: 14px">
+<svg style="flex-shrink: 0" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1F5F4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"></path></svg>
+<span>They unlock your vault on <strong>this phone</strong> if you forget your PIN.</span>
+</div>
+<div style="display: flex; gap: 12px; background: #FFFFFF; border: 1px solid #D6D6CF; border-radius: 12px; padding: 14px">
+<svg style="flex-shrink: 0" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A3341F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+<span>They <strong>won't</strong> restore your passwords on a new phone or after uninstalling. Your vault exists only here.</span>
+</div>
+<div style="display: flex; gap: 12px; background: #FFFFFF; border: 1px solid #D6D6CF; border-radius: 12px; padding: 14px">
+<svg style="flex-shrink: 0" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9A5B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2z"></path><path d="M12 10v5M12 18v.01"></path></svg>
+<span>Anyone with <strong>this phone and these words</strong> can open your vault. Never share them.</span>
+</div>
+</div>
+<p style="margin: 0; font-size: 14px; color: #4A4A45; line-height: 1.5">OffGrid Vault will <strong>never</strong> ask you for these words. There's no account, no support login, nothing online.</p>
+<button style="margin-top: auto; min-height: 52px; border-radius: 12px; border: 0; background: #1F5F4A; color: #FFFFFF; font: 600 16px 'IBM Plex Sans', sans-serif">I understand</button>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Recovery limits — pop</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#0E7A50}a:hover{color:#0A5C3C}
+.pop{position:relative}
+.pop::before{content:"";position:absolute;left:0;bottom:-6px;width:100%;height:6px;background:var(--eb,#7A7A7A);transform:skewX(45deg);transform-origin:top left}
+.pop::after{content:"";position:absolute;top:0;right:-6px;width:6px;height:100%;background:var(--er,#B5B5B5);transform:skewY(45deg);transform-origin:top left}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F1F1EE; color: #0D0D0D; font-family: 'Manrope', system-ui, sans-serif; display: flex; flex-direction: column">
+<div style="background: #0D0D0D; color: #FFFFFF; padding: 56px 24px 28px; display: flex; flex-direction: column; gap: 12px">
+<span style="font-size: 11px; font-weight: 800; letter-spacing: 3px; color: #A6A6A6">STEP 4 OF 4</span>
+<h1 style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 400; font-size: 40px; line-height: 1.05">before you go.</h1>
+</div>
+<div style="flex-grow: 1; padding: 24px 24px 40px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; gap: 14px; background: #FFFFFF; border: 1px solid #D9D9D3; padding: 14px; font-size: 14px; line-height: 1.5"><span style="flex-shrink: 0; width: 28px; height: 28px; background: #4DFFB4; color: #0D0D0D; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><path d="M5 12l5 5 9-10"></path></svg></span><span>They unlock your vault on <strong>this phone</strong> if you forget your PIN.</span></div>
+<div style="display: flex; gap: 14px; background: #FFFFFF; border: 1px solid #D9D9D3; padding: 14px; font-size: 14px; line-height: 1.5"><span style="flex-shrink: 0; width: 28px; height: 28px; background: #B8361C; color: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><path d="M6 6l12 12M18 6L6 18"></path></svg></span><span>They <strong>won't</strong> restore your passwords on a new phone or after uninstalling. Your vault exists only here.</span></div>
+<div style="display: flex; gap: 14px; background: #FFFFFF; border: 1px solid #D9D9D3; padding: 14px; font-size: 14px; line-height: 1.5"><span style="flex-shrink: 0; width: 28px; height: 28px; background: #FFB547; color: #0D0D0D; display: flex; align-items: center; justify-content: center; font-weight: 800">!</span><span>Anyone with <strong>this phone and these words</strong> can open your vault. Never share them.</span></div>
+<div style="background: #0D0D0D; color: #FFFFFF; padding: 14px; font-size: 13px; line-height: 1.5"><span style="color: #4DFFB4; font-size: 10px; font-weight: 800; letter-spacing: 2px">NEVER ASKED</span><br>OffGrid Vault will never ask you for these words. No account, no support login, nothing online.</div>
+<button class="pop" style="--eb: #4A4A4A; --er: #7A7A7A; margin: auto 6px 0 0; height: 56px; border: 0; background: #0D0D0D; color: #FFFFFF; font: 800 14px 'Manrope', sans-serif; letter-spacing: 3px">I UNDERSTAND</button>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

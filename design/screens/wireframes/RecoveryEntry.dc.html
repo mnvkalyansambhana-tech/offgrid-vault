@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Enter recovery words</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#1F5F4A}a:hover{color:#163F32}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F6F6F2; color: #1C1C1C; font-family: 'IBM Plex Sans', system-ui, sans-serif; display: flex; flex-direction: column">
+<div style="height: 56px; flex-shrink: 0; display: flex; align-items: center; gap: 8px; padding: 0 8px; border-bottom: 1px solid #D6D6CF">
+<button aria-label="Back" style="width: 44px; height: 44px; border: 0; background: transparent; color: #1C1C1C; display: flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg></button>
+<span style="font-size: 18px; font-weight: 600">Recovery words</span>
+</div>
+<div style="flex-grow: 1; padding: 20px 24px 24px; display: flex; flex-direction: column; gap: 16px">
+<p style="margin: 0; font-size: 15px; color: #4A4A45; line-height: 1.45">Enter all 12 words in order.</p>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<div style="display: flex; align-items: center; gap: 8px"><label for="r1" style="width: 20px; font-size: 13px; color: #5E5E58">1</label><input id="r1" type="text" autocomplete="off" value="[word]" style="min-width: 0; flex-grow: 1; height: 44px; border: 1.5px solid #1F5F4A; border-radius: 10px; padding: 0 10px; font: 400 15px 'IBM Plex Mono', monospace; background: #FFFFFF"></div>
+<div style="display: flex; align-items: center; gap: 8px"><label for="r2" style="width: 20px; font-size: 13px; color: #5E5E58">2</label><input id="r2" type="text" autocomplete="off" value="[word]" style="min-width: 0; flex-grow: 1; height: 44px; border: 1.5px solid #1F5F4A; border-radius: 10px; padding: 0 10px; font: 400 15px 'IBM Plex Mono', monospace; background: #FFFFFF"></div>
+<div style="display: flex; align-items: center; gap: 8px"><label for="r3" style="width: 20px; font-size: 13px; color: #5E5E58">3</label><input id="r3" type="text" autocomplete="off" value="[wrod]" style="min-width: 0; flex-grow: 1; height: 44px; border: 1.5px solid #A3341F; border-radius: 10px; padding: 0 10px; font: 400 15px 'IBM Plex Mono', monospace; background: #FFFFFF"></div>
+<div style="display: flex; align-items: center; gap: 8px"><label for="r4" style="width: 20px; font-size: 13px; color: #5E5E58">4</label><input id="r4" type="text" autocomplete="off" style="min-width: 0; flex-grow: 1; height: 44px; border: 1.5px solid #BDBDB4; border-radius: 10px; padding: 0 10px; font: 400 15px 'IBM Plex Mono', monospace; background: #FFFFFF"></div>
+<div style="display: flex; align-items: center; gap: 8px"><label for="r5" style="width: 20px; font-size: 13px; color: #5E5E58">5</label><input id="r5" type="text" autocomplete="off" style="min-width: 0; flex-grow: 1; height: 44px; border: 1.5px solid #BDBDB4; border-radius: 10px; padding: 0 10px; font: 400 15px 'IBM Plex Mono', monospace; background: #FFFFFF"></div>
+<div style="display: flex; align-items: center; gap: 8px"><label for="r6" style="width: 20px; font-size: 13px; color: #5E5E58">6</label><input id="r6" type="text" autocomplete="off" style="min-width: 0; flex-grow: 1; height: 44px; border: 1.5px solid #BDBDB4; border-radius: 10px; padding: 0 10px; font: 400 15px 'IBM Plex Mono', monospace; background: #FFFFFF"></div>
+<div style="display: flex; align-items: center; gap: 8px"><label for="r7" style="width: 20px; font-size: 13px; color: #5E5E58">7</label><input id="r7" type="text" autocomplete="off" style="min-width: 0; flex-grow: 1; height: 44px; border: 1.5px solid #BDBDB4; border-radius: 10px; padding: 0 10px; font: 400 15px 'IBM Plex Mono', monospace; background: #FFFFFF"></div>
+<div style="display: flex; align-items: center; gap: 8px"><label for="r8" style="width: 20px; font-size: 13px; color: #5E5E58">8</label><input id="r8" type="text" autocomplete="off" style="min-width: 0; flex-grow: 1; height: 44px; border: 1.5px solid #BDBDB4; border-radius: 10px; padding: 0 10px; font: 400 15px 'IBM Plex Mono', monospace; background: #FFFFFF"></div>
+<div style="display: flex; align-items: center; gap: 8px"><label for="r9" style="width: 20px; font-size: 13px; color: #5E5E58">9</label><input id="r9" type="text" autocomplete="off" style="min-width: 0; flex-grow: 1; height: 44px; border: 1.5px solid #BDBDB4; border-radius: 10px; padding: 0 10px; font: 400 15px 'IBM Plex Mono', monospace; background: #FFFFFF"></div>
+<div style="display: flex; align-items: center; gap: 8px"><label for="r10" style="width: 20px; font-size: 13px; color: #5E5E58">10</label><input id="r10" type="text" autocomplete="off" style="min-width: 0; flex-grow: 1; height: 44px; border: 1.5px solid #BDBDB4; border-radius: 10px; padding: 0 10px; font: 400 15px 'IBM Plex Mono', monospace; background: #FFFFFF"></div>
+<div style="display: flex; align-items: center; gap: 8px"><label for="r11" style="width: 20px; font-size: 13px; color: #5E5E58">11</label><input id="r11" type="text" autocomplete="off" style="min-width: 0; flex-grow: 1; height: 44px; border: 1.5px solid #BDBDB4; border-radius: 10px; padding: 0 10px; font: 400 15px 'IBM Plex Mono', monospace; background: #FFFFFF"></div>
+<div style="display: flex; align-items: center; gap: 8px"><label for="r12" style="width: 20px; font-size: 13px; color: #5E5E58">12</label><input id="r12" type="text" autocomplete="off" style="min-width: 0; flex-grow: 1; height: 44px; border: 1.5px solid #BDBDB4; border-radius: 10px; padding: 0 10px; font: 400 15px 'IBM Plex Mono', monospace; background: #FFFFFF"></div>
+</div>
+<p role="alert" style="margin: 0; font-size: 13px; color: #8A2B19">Word 3 isn't on the recovery word list — check the spelling.</p>
+<p style="margin: 0; font-size: 13px; color: #5E5E58">Typing is checked against the word list as you go. Keyboard suggestions are off.</p>
+<button style="margin-top: auto; min-height: 52px; border-radius: 12px; border: 0; background: #1F5F4A; color: #FFFFFF; font: 600 16px 'IBM Plex Sans', sans-serif">Unlock &amp; set new PIN</button>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

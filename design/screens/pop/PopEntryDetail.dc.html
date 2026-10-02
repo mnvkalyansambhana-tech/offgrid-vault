@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Entry detail — pop</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#0E7A50}a:hover{color:#0A5C3C}
+.pop{position:relative}
+.pop::before{content:"";position:absolute;left:0;bottom:-6px;width:100%;height:6px;background:var(--eb,#7A7A7A);transform:skewX(45deg);transform-origin:top left}
+.pop::after{content:"";position:absolute;top:0;right:-6px;width:6px;height:100%;background:var(--er,#B5B5B5);transform:skewY(45deg);transform-origin:top left}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F1F1EE; color: #0D0D0D; font-family: 'Manrope', system-ui, sans-serif; display: flex; flex-direction: column; position: relative">
+<div style="background: #0D0D0D; color: #FFFFFF; padding: 8px 12px 24px 24px; display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; margin-left: -12px">
+<button aria-label="Back" style="width: 44px; height: 44px; border: 0; background: transparent; color: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M15 18l-6-6 6-6"></path></svg></button>
+<span style="flex-grow: 1"></span>
+<button aria-label="Edit" style="width: 44px; height: 44px; border: 0; background: transparent; color: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"><path d="M4 20h4l11-11-4-4L4 16z"></path></svg></button>
+<button aria-label="Delete" style="width: 44px; height: 44px; border: 0; background: transparent; color: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg></button>
+</div>
+<span style="font-size: 11px; font-weight: 800; letter-spacing: 3px; color: #A6A6A6">LOGIN</span>
+<h1 style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 400; font-size: 40px; line-height: 1.05">github.</h1>
+</div>
+<div style="padding: 20px 24px; display: flex; flex-direction: column; gap: 10px">
+<div style="background: #FFFFFF; border: 1px solid #D9D9D3; padding: 10px 6px 10px 16px; display: flex; align-items: center">
+<div style="flex-grow: 1; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 10px; font-weight: 800; letter-spacing: 2px; color: #55554F">USERNAME</span><span style="font-size: 15px; font-weight: 600">[dev@example.com]</span></div>
+<button aria-label="Copy username" style="width: 44px; height: 44px; border: 0; background: transparent; color: #0D0D0D; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"><rect x="9" y="9" width="11" height="11"></rect><path d="M5 15V4h11"></path></svg></button>
+</div>
+<div style="background: #0D0D0D; color: #FFFFFF; display: flex; flex-direction: column">
+<div style="padding: 10px 6px 10px 16px; display: flex; align-items: center">
+<div style="flex-grow: 1; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 10px; font-weight: 800; letter-spacing: 2px; color: #4DFFB4">PASSWORD · HIDES IN 14S</span><span style="font: 500 15px 'JetBrains Mono', monospace">[revealed-password]</span></div>
+<button aria-label="Hide password" style="width: 44px; height: 44px; border: 0; background: transparent; color: #4DFFB4; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
+<button aria-label="Copy password" style="width: 44px; height: 44px; border: 0; background: transparent; color: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"><rect x="9" y="9" width="11" height="11"></rect><path d="M5 15V4h11"></path></svg></button>
+</div>
+<span style="height: 3px; width: 70%; background: #4DFFB4"></span>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #D9D9D3; padding: 12px 16px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 10px; font-weight: 800; letter-spacing: 2px; color: #55554F">WEBSITE</span><span style="font-size: 15px; font-weight: 600">github.com</span></div>
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 10px; font-weight: 800; letter-spacing: 2px; color: #55554F">LINKED APP</span><span style="font-size: 15px; font-weight: 600">[GitHub app] <span style="font-size: 10px; font-weight: 800; letter-spacing: 1.5px; color: #0E7A50">✓ SIGNATURE</span></span></div>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #D9D9D3; padding: 12px 16px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; align-items: center"><span style="font-size: 10px; font-weight: 800; letter-spacing: 2px; color: #55554F">HISTORY · 3 / 5</span><a href="#" style="font-size: 10px; font-weight: 800; letter-spacing: 2px; text-decoration: none; padding: 8px 0">CLEAR</a></div>
+<div style="display: flex; justify-content: space-between; font-size: 13px"><span style="font-family: 'JetBrains Mono', monospace">••••••••••</span><span style="color: #55554F">[date]</span></div>
+<div style="display: flex; justify-content: space-between; font-size: 13px"><span style="font-family: 'JetBrains Mono', monospace">••••••••••</span><span style="color: #55554F">[date]</span></div>
+<div style="display: flex; justify-content: space-between; font-size: 13px"><span style="font-family: 'JetBrains Mono', monospace">••••••••••</span><span style="color: #55554F">[date]</span></div>
+</div>
+</div>
+<div role="status" class="pop" style="--eb: #4A4A4A; --er: #7A7A7A; position: absolute; left: 24px; right: 30px; bottom: 32px; background: #0D0D0D; color: #FFFFFF; padding: 16px; display: flex; justify-content: space-between; font-size: 10px; font-weight: 800; letter-spacing: 2px"><span style="color: #4DFFB4">COPIED</span><span>CLIPBOARD CLEARS IN 30S</span></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

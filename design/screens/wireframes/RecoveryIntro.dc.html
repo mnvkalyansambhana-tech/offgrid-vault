@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Recovery intro</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#1F5F4A}a:hover{color:#163F32}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F6F6F2; color: #1C1C1C; font-family: 'IBM Plex Sans', system-ui, sans-serif; display: flex; flex-direction: column; padding: 56px 24px 32px; gap: 24px">
+<div style="width: 56px; height: 56px; border-radius: 16px; background: #E3ECE8; color: #1F5F4A; display: flex; align-items: center; justify-content: center">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"></circle><path d="M11 12l9-9M17 6l3 3"></path></svg>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<h1 style="margin: 0; font-size: 26px; font-weight: 600">Your recovery words</h1>
+<p style="margin: 0; font-size: 16px; color: #4A4A45; line-height: 1.5">On the next screen you'll see 12 words. They're the only way back in if you forget your PIN.</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px; font-size: 15px; line-height: 1.45">
+<div style="display: flex; gap: 12px"><span style="flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: #1C1C1C; color: #FFFFFF; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center">1</span><span>Write them on paper. Screenshots are blocked.</span></div>
+<div style="display: flex; gap: 12px"><span style="flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: #1C1C1C; color: #FFFFFF; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center">2</span><span>Keep them somewhere safe and private.</span></div>
+<div style="display: flex; gap: 12px"><span style="flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: #1C1C1C; color: #FFFFFF; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center">3</span><span>You'll see them <strong>only once</strong>. They never change.</span></div>
+</div>
+<div style="margin-top: auto; display: flex; flex-direction: column; gap: 12px">
+<p style="margin: 0; font-size: 13px; color: #5E5E58; text-align: center">Have pen and paper ready</p>
+<button style="min-height: 52px; border-radius: 12px; border: 0; background: #1F5F4A; color: #FFFFFF; font: 600 16px 'IBM Plex Sans', sans-serif">Show my words</button>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
