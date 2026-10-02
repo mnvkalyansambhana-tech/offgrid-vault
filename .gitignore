@@ -1,0 +1,17 @@
+# Android / Gradle
+.gradle/
+build/
+/local.properties
+/captures
+.externalNativeBuild
+.cxx
+*.apk
+*.aab
+*.keystore
+*.jks
+# IDE
+.idea/
+*.iml
+.DS_Store
+# Claude local settings
+.claude/settings.local.json
