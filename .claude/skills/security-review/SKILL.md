@@ -15,10 +15,14 @@ Always re-read `docs/DECISIONS.md` and `docs/SECURITY_DESIGN.md` first and flag 
 - [ ] Merged manifest has **no `android.permission.INTERNET`** (check `app/build/intermediates/merged_manifest/...` after adding any dependency).
 - [ ] `android:allowBackup="false"`, `dataExtractionRules` exclude all domains for cloud-backup and device-transfer.
 - [ ] `FLAG_SECURE` set on every Activity/window, including dialogs and the recovery-words screen.
+- [ ] Every Compose `Dialog`/`Popup`/bottom sheet uses `SecureFlagPolicy.SecureOn` (T2).
+- [ ] `INTERNET` has `tools:node="remove"` and the merged-manifest check task passes (T13); dependency verification metadata updated for any new dependency.
 - [ ] minSdk 30.
 
 ### Crypto
 - [ ] No hand-rolled primitives; vetted library only.
+- [ ] Software AEAD/HKDF via Tink (NO_PREFIX); JCA only for AndroidKeyStore keys (T8).
+- [ ] Protobuf secret fields are `bytes` + `wire.redacted` (T7).
 - [ ] AES-256-GCM with a **fresh random 96-bit nonce per encryption**; nonce never reused with the same key.
 - [ ] Header passed as **associated data** to every vault encryption/decryption.
 - [ ] Argon2id params read from header; salt random per vault (and refreshed when PIN changes).

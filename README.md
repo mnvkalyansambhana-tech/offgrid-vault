@@ -17,6 +17,9 @@ An Android password manager that **never connects to the internet**. Your vault 
 | [docs/SECURITY_DESIGN.md](docs/SECURITY_DESIGN.md) | Threat model, key hierarchy, crypto, file format, unlock & lockout |
 | [docs/OPEN_QUESTIONS.md](docs/OPEN_QUESTIONS.md) | Decisions still pending |
 | [docs/UX_COPY.md](docs/UX_COPY.md) | Approved user-facing text |
+| [docs/ROADMAP.md](docs/ROADMAP.md) | Milestone-based development plan |
+| [docs/DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md) | Locked UI design system (tokens, type, components) |
+| [design/](design/) | Versioned UI mockups (OffGrid Pop screens) |
 | [CLAUDE.md](CLAUDE.md) | Context and working agreement for Claude Code |
 
 ## Licence
