@@ -15,3 +15,5 @@ build/
 .DS_Store
 # Claude local settings
 .claude/settings.local.json
+# Kotlin 2 compiler caches
+.kotlin/

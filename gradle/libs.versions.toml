@@ -1,0 +1,42 @@
+[versions]
+agp = "9.4.1"
+kotlin = "2.4.20"
+composeBom = "2026.09.00"
+activityCompose = "1.13.0"
+coreKtx = "1.19.1"
+coroutines = "1.11.0"
+tink = "1.23.0"
+lazysodium = "5.2.0"
+jna = "5.19.1"
+bouncycastle = "1.86"
+junit = "4.13.2"
+androidxTestRunner = "1.7.0"
+androidxTestJunit = "1.3.0"
+
+[libraries]
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+compose-ui = { module = "androidx.compose.ui:ui" }
+compose-foundation = { module = "androidx.compose.foundation:foundation" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+
+# Crypto (C13, T8)
+tink-android = { module = "com.google.crypto.tink:tink-android", version.ref = "tink" }
+lazysodium-android = { module = "com.goterl:lazysodium-android", version.ref = "lazysodium" }
+jna = { module = "net.java.dev.jna:jna", version.ref = "jna" }
+
+# Test-only
+lazysodium-java = { module = "com.goterl:lazysodium-java", version.ref = "lazysodium" }
+bouncycastle-prov = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncycastle" }
+junit = { module = "junit:junit", version.ref = "junit" }
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidxTestRunner" }
+androidx-test-junit = { module = "androidx.test.ext:junit", version.ref = "androidxTestJunit" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

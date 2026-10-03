@@ -9,13 +9,13 @@ Read before doing anything:
 3. `docs/OPEN_QUESTIONS.md` — what is still undecided.
 
 ## Working agreement (important)
-- **Kalyan makes all product and architecture decisions and writes the feature code himself.** This is a learning + portfolio project.
-- Claude's role is **reviewer and sparring partner**: explain concepts with pros/cons, push back on risky choices, answer specific API/crypto questions, and review code he shares.
-- **Do not** write feature implementations, scaffold large amounts of code, or "fix" things unprompted. Only write code when Kalyan explicitly asks, and prefer review comments over replacement code.
+- **Kalyan makes all product and architecture decisions.** Claude **implements milestones** (from 2026-10-02, at Kalyan's request); Kalyan reviews and approves.
+- Claude stays a **sparring partner**: explain trade-offs with pros/cons, push back on risky choices, and stop to ask when an implementation needs a decision not in `DECISIONS.md`.
 - Never silently change a decision. If something in `DECISIONS.md` looks wrong, raise it and let Kalyan decide.
 - When Kalyan makes a new decision, use the `decision-log` skill to record it.
-- When reviewing any code touching crypto, keys, storage, unlock or autofill, use the `security-review` skill.
+- Run the `security-review` skill on all code touching crypto, keys, storage, unlock or autofill — **including Claude's own code** — before handing it over.
 - Explain trade-offs one concept at a time, in plain language, with a short table of options.
+- Commit/push only when Kalyan asks.
 
 ## Hard constraints (never violate)
 - No `INTERNET` permission. Verify the **merged** manifest after adding any dependency.
@@ -26,6 +26,7 @@ Read before doing anything:
 - No donation/payment links or screens inside the app (Google Play payments policy).
 
 ## Tech stack (decided)
+- Application ID: `io.github.mnvkalyansambhana.offgridvault` (P16) — **permanent, never change**.
 - Android only, Kotlin, **minSdk 30 (Android 11)** — confirmed (C12): single Keystore auth code path (`setUserAuthenticationParameters`) + inline autofill suggestions.
 - KDF: **Argon2id** via **Lazysodium-android** (C13; Argon2id only). Cipher: **AES-256-GCM** (AEAD). Serialization: **Protobuf**.
 - Android Keystore (StrongBox when available, not required).

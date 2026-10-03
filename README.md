@@ -2,7 +2,7 @@
 
 An Android password manager that **never connects to the internet**. Your vault lives only on your phone, encrypted with modern cryptography. No accounts, no cloud, no sync, no tracking.
 
-> Status: **design phase** — architecture decided, implementation not started.
+> Status: **M0 (foundation) implemented** — see [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ## Principles
 - **Device-bound.** Data never leaves the device. Uninstalling the app deletes the vault permanently.
@@ -18,6 +18,7 @@ An Android password manager that **never connects to the internet**. Your vault 
 | [docs/OPEN_QUESTIONS.md](docs/OPEN_QUESTIONS.md) | Decisions still pending |
 | [docs/UX_COPY.md](docs/UX_COPY.md) | Approved user-facing text |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Milestone-based development plan |
+| [docs/DEV_SETUP.md](docs/DEV_SETUP.md) | Build commands, guardrails, adding dependencies, M0 test checklist |
 | [docs/DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md) | Locked UI design system (tokens, type, components) |
 | [design/](design/) | Versioned UI mockups (OffGrid Pop screens) |
 | [CLAUDE.md](CLAUDE.md) | Context and working agreement for Claude Code |

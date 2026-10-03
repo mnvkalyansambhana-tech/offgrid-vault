@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Least privilege: CI only reads the repo.
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      # Actions pinned to commit SHAs (T13); the tag is in the trailing comment.
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - uses: gradle/actions/wrapper-validation@0723195856401067f7a2779048b490ace7a47d7c # v5
+
+      - uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c # v5
+
+      # check = unit tests + Android Lint + checkForbiddenApis + merged-manifest INTERNET check
+      # + 16 KB native-lib alignment, for debug and release. Release is built unsigned.
+      - name: Build and verify
+        run: ./gradlew check assembleRelease --stacktrace
+
+      - name: Upload reports
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: reports
+          path: |
+            **/build/reports/
+          retention-days: 7
