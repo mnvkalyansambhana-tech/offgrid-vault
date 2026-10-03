@@ -31,5 +31,5 @@ Read before doing anything:
 - KDF: **Argon2id** via **Lazysodium-android** (C13; Argon2id only). Cipher: **AES-256-GCM** (AEAD). Serialization: **Protobuf**.
 - Android Keystore (StrongBox when available, not required).
 - UI: Jetpack Compose, single Activity, MVVM + StateFlow, manual DI, Coroutines (T1–T6). Protobuf via **Wire**; software AEAD/HKDF via **Tink**; JCA only for Keystore keys (T7–T8). Full list: `docs/DECISIONS.md` → Tech stack.
-- Dev plan: `docs/ROADMAP.md` (milestones M0–M9).
+- Dev plan: `docs/ROADMAP.md` (milestones M0–M9). Build/guardrails: `docs/DEV_SETUP.md`. Lint + `checkForbiddenApis` text scan, no detekt (T19).
 - UI: **locked** OffGrid Pop design (P15) — spec `docs/DESIGN_SYSTEM.md`, screens `design/screens/pop/`. Flag any UI code that drifts from it.

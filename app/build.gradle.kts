@@ -19,6 +19,8 @@ android {
         versionCode = 1
         versionName = "0.1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        // ABIs that run Android 11+. Drops JNA's dead armeabi/mips/mips64 and 32-bit x86 libs.
+        ndk { abiFilters += setOf("arm64-v8a", "armeabi-v7a", "x86_64") }
     }
 
     buildTypes {

@@ -11,7 +11,7 @@ Rules for every milestone:
 | Milestone | Theme | Play track | User-visible? |
 |---|---|---|---|
 | M0 | Foundation & guardrails ✅ *code done 2026-10-03 — awaiting device test + Play Console* | Internal | Empty shell |
-| M1 | Crypto core | Internal | Debug-only benchmark screen |
+| M1 | Crypto core ✅ *done 2026-10-03 — 34 JVM + 3 on-device tests pass; Pixel 9a bench t=16 ≈ 0.6 s (cheap-phone floor check still open)* | Internal | Debug-only benchmark screen |
 | M2 | Vault file format & storage | Internal | No |
 | M3 | Setup & PIN unlock (happy path) | Internal | Yes |
 | M4 | Lockout, recovery & session | Internal | Yes |

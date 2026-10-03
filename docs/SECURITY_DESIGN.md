@@ -24,7 +24,7 @@
                     │      encrypts vault payload with AES-256-GCM                    │
                     └────────────────────────────────────────────────────────────────┘
         wrapped copy #1 (PIN)          wrapped copy #2 (biometric, optional)     wrapped copy #3 (recovery)
-  Argon2id(PIN, salt) → KEK_pin        Keystore key K_bio                        HKDF(recovery entropy) → KEK_rec
+  Argon2id(PIN, salt) → KEK_pin        Keystore key K_bio                        HKDF(entropy, recovery_salt) → KEK_rec
   + Keystore key K_device              (BIOMETRIC_STRONG required,               + Keystore key K_device
     (device-bound, no user auth)        invalidated on new enrolment)              (device-bound, no user auth)
 ```
@@ -42,14 +42,14 @@ K_device and K_bio: `setUnlockedDeviceRequired(true)` — **conditional on devic
 | Purpose | Choice |
 |---|---|
 | PIN → key | Argon2id via Lazysodium-android / libsodium. m = 64 MiB, p = 1, t calibrated on-device at setup to ~0.5–1 s with floor t = 2; recalibrated (with new salt) on PIN change. Validated against RFC 9106 test vectors |
-| Recovery words → key | HKDF-SHA256 (words already carry 128 bits of entropy) |
+| Recovery words → key | HKDF-SHA256(entropy, salt = per-vault `recovery_salt`, info = `offgrid-vault/v1/recovery-kek`) — words already carry 128 bits of entropy (C19) |
 | Vault + key wrapping | AES-256-GCM, fresh random 96-bit nonce per encryption, never reused |
 | Hardware keys | Android Keystore (StrongBox if available) |
 
 ## 4. Vault file format (v1, draft)
 ```
 [magic "PVLT"] [format_version] [generation]
-[argon2id params + salt] [wrapped_key_pin] [wrapped_key_bio?] [wrapped_key_recovery]
+[argon2id params + salt] [recovery_salt] [wrapped_key_pin] [wrapped_key_bio?] [wrapped_key_recovery]
 [nonce] [AES-256-GCM ciphertext of Protobuf Vault message] [GCM tag]
 ```
 - The entire header is passed as **AEAD associated data** → any header tampering fails decryption.

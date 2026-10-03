@@ -48,3 +48,17 @@ Install the platform once: `sdkmanager "platforms;android-37.0" "build-tools;37.
 | 5 | No backup | `adb shell bmgr backupnow io.github.mnvkalyansambhana.offgridvault.debug` | Reports backup not allowed / nothing backed up |
 | 6 | Fonts offline | Airplane mode, cold-start the app | Same fonts as online (they are bundled) |
 | 7 | Separate debug app | Install debug next to a future Play build | Two apps, independent data |
+
+## M1 device tests (crypto core)
+| # | Test | How | Expect |
+|---|---|---|---|
+| 1 | On-device crypto vectors | `./gradlew :core:crypto:connectedDebugAndroidTest` (phone connected) | 3/3 pass: Android libsodium gives the same Argon2id key as the JVM tests; AES-GCM round-trips; BIP-39 wordlist loads from the APK |
+| 2 | Argon2 benchmark | `./gradlew :app:installDebug`, open **"OGV Argon2 bench"** (debug-only launcher icon), tap RUN BENCHMARK | Times for t=2…6 at 64 MiB and the calibrated `t`. Send the numbers back — they confirm C14 (t ≥ 2 within ~1 s) |
+| 3 | Benchmark screen is secure | Screenshot while on the bench screen | Blocked (FLAG_SECURE) |
+
+> **Same phone listed twice?** With wireless debugging, `adb devices` can show the phone both as
+> `IP:port` (manual `adb connect`) and as `adb-…._adb-tls-connect._tcp` (auto-discovered). Gradle
+> then runs the tests on "both" at once and they collide (all tests pass, task still fails).
+> Fix: `adb disconnect <IP:port>` so only one entry remains.
+
+JVM unit tests (34, incl. RFC 9106 / RFC 5869 / GCM / BIP-39 vectors): `./gradlew :core:crypto:testDebugUnitTest`.

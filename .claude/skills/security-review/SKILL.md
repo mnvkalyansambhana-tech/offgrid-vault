@@ -26,7 +26,7 @@ Always re-read `docs/DECISIONS.md` and `docs/SECURITY_DESIGN.md` first and flag 
 - [ ] AES-256-GCM with a **fresh random 96-bit nonce per encryption**; nonce never reused with the same key.
 - [ ] Header passed as **associated data** to every vault encryption/decryption.
 - [ ] Argon2id params read from header; salt random per vault (and refreshed when PIN changes).
-- [ ] Recovery words → HKDF (not stored anywhere on device).
+- [ ] Recovery words → HKDF with per-vault `recovery_salt` (C19); words/entropy never stored on device.
 - [ ] Constant-time comparisons for any MAC/secret comparison.
 - [ ] Use `SecureRandom` only.
 
