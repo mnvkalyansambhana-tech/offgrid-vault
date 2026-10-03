@@ -1,6 +1,10 @@
 # Android / Gradle
 .gradle/
-build/
+# Build outputs at project/module roots only — a bare `build/` would also hide
+# source packages named `build` (e.g. buildSrc/src/.../build/).
+/build/
+/*/build/
+/*/*/build/
 /local.properties
 /captures
 .externalNativeBuild
