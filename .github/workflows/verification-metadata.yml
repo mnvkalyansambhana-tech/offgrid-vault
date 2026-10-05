@@ -1,0 +1,51 @@
+name: Regenerate dependency checksums
+
+# Manual only (Actions tab → "Regenerate dependency checksums" → Run workflow).
+# Builds everything from an EMPTY Gradle cache and records the SHA-256 of every artifact a
+# fresh machine downloads, then uploads gradle/verification-metadata.xml for review.
+# It never commits: a human reviews the diff (entries should only be ADDED; a CHANGED
+# checksum for an existing artifact is a red flag) and commits it.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - uses: gradle/actions/wrapper-validation@0723195856401067f7a2779048b490ace7a47d7c # v5
+
+      - uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c # v5
+        with:
+          cache-disabled: true # cold cache on purpose
+
+      - name: Record checksums from a cold cache
+        run: >
+          ./gradlew --write-verification-metadata sha256
+          check assembleRelease assembleDebug resolveAllDependencies
+          :core:crypto:assembleDebugAndroidTest
+          --no-configuration-cache --no-build-cache --stacktrace
+
+      - name: Summarise changes
+        run: |
+          echo "added sha256 lines:   $(git diff -U0 gradle/verification-metadata.xml | grep -c '^+.*sha256' || true)"
+          echo "removed sha256 lines: $(git diff -U0 gradle/verification-metadata.xml | grep -c '^-.*sha256' || true)"
+          git diff --stat
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: verification-metadata
+          path: gradle/verification-metadata.xml
+          retention-days: 7

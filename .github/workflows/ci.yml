@@ -35,7 +35,9 @@ jobs:
       # check = unit tests + Android Lint + checkForbiddenApis + merged-manifest INTERNET check
       # + 16 KB native-lib alignment, for debug and release. Release is built unsigned.
       - name: Build and verify
-        run: ./gradlew check assembleRelease --stacktrace
+        # No configuration cache in CI: it saves nothing on a cold runner and wraps real
+        # errors (e.g. dependency verification) in opaque serialization failures.
+        run: ./gradlew check assembleRelease --no-configuration-cache --stacktrace
 
       - name: Upload reports
         if: failure()
