@@ -15,7 +15,7 @@ Rules for every milestone:
 | M2 | Vault file format & storage ✅ *code done 2026-10-05 — 22 JVM tests incl. crash at every save step* | Internal | No |
 | M3 | Setup & PIN unlock (happy path) ✅ *code done 2026-10-05 — 70 JVM tests pass; awaiting device tests + S21 lab result* | Internal | Yes |
 | M4 | Lockout, recovery & session ✅ *code done 2026-10-06 — 88 JVM tests pass; awaiting device tests* | Internal | Yes |
-| M5 | Vault MVP (entries, reveal, copy, generator) | **Closed test starts** | Yes — first useful app |
+| M5 | Vault MVP (entries, reveal, copy, generator) ✅ *done 2026-10-06 — 105 JVM tests pass, Pixel 9a device test passed; awaiting Play closed-test setup* | **Closed test starts** | Yes — first useful app |
 | M6 | Biometric unlock | Closed | Yes |
 | M7 | Autofill — fill | Closed | Yes |
 | M8 | Autofill — save new logins | Closed | Yes |

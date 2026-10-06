@@ -72,7 +72,7 @@ K_device and K_bio: `setUnlockedDeviceRequired(true)` — **conditional on devic
 
 ## 6. Runtime protections
 - Auto-lock after 5 minutes of **inactivity**, immediately on screen-off; switching apps does not lock (S23). DEK held as one `AeadKey` per session and closed on lock (M2); wiping is **best effort**: the JVM/ART may copy arrays and `SecretKeySpec` copies key bytes, so wiping can't be guaranteed (S25).
-- Secrets (passwords, history) kept encrypted in memory with an ephemeral session key; decrypted only on reveal/copy/autofill.
+- Secrets (passwords, notes, history) kept encrypted in memory with an ephemeral session key (S9, implemented M5 as `VaultContent`/`SealedSecret`): re-sealed right after unlock, decrypted only on reveal/copy/edit/save/autofill; the session key is closed on lock. Titles, usernames and websites stay in clear for list/search.
 - Reveal auto-masks after 20 s (timer restarts on each tap, S10) and immediately on backgrounding / screen-off. Clipboard cleared after 30 s or on vault lock, whichever first (S11) via `clearPrimaryClip()` without reading first; a persisted "pending clear" flag clears on next start if the process died (S18); mark clip as sensitive (`ClipDescription.EXTRA_IS_SENSITIVE`).
 - Tapjacking protection (`filterTouchesWhenObscured`) on sensitive views.
 - PIN via in-app number pad; common PINs rejected (S19). Secret fields: no suggestions, `IME_FLAG_NO_PERSONALIZED_LEARNING`; app screens excluded from other autofill services (S20).

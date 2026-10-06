@@ -87,9 +87,9 @@ class RecoveryLaterViewModel(private val app: AppContainer) : ViewModel() {
         step = Step.Saving
         viewModelScope.launch {
             val header = withContext(Dispatchers.Default) {
-                app.enrollment.enroll(unlocked.header, unlocked.vault, unlocked.key, key, entropy)
+                app.enrollment.enroll(unlocked.header, unlocked.content.toVault(), unlocked.key, key, entropy)
             }
-            app.session.updated(header, unlocked.vault)
+            app.session.updated(header)
             wipeSecrets()
             onDone()
         }

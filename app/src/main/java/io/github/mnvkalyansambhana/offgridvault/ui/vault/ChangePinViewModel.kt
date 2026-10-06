@@ -81,12 +81,12 @@ class ChangePinViewModel(private val app: AppContainer) : ViewModel() {
         viewModelScope.launch {
             val header = withContext(Dispatchers.Default) {
                 try {
-                    app.pinReset.setNewPin(unlocked.header, unlocked.vault, unlocked.key, key, pin)
+                    app.pinReset.setNewPin(unlocked.header, unlocked.content.toVault(), unlocked.key, key, pin)
                 } finally {
                     pin.wipe()
                 }
             }
-            app.session.updated(header, unlocked.vault)
+            app.session.updated(header)
             wipe()
             onDone()
         }

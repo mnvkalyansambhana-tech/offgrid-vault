@@ -43,6 +43,9 @@ fun SharpInput(
     isError: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Text,
     capitalization: KeyboardCapitalization = KeyboardCapitalization.None,
+    singleLine: Boolean = true,
+    /** For [secret] fields: when true the text is shown (an eye toggle in the caller). */
+    showSecret: Boolean = false,
 ) {
     var focused by remember { mutableStateOf(false) }
     val borderColor = when {
@@ -65,9 +68,10 @@ fun SharpInput(
                     .border(OffGridDimens.InputBorder, borderColor)
                     .padding(horizontal = 14.dp, vertical = 14.dp),
                 textStyle = (if (secret) OffGridType.Secret else OffGridType.Body).copy(color = OffGridColors.Ink),
-                singleLine = true,
+                singleLine = singleLine,
+                minLines = if (singleLine) 1 else 3,
                 cursorBrush = SolidColor(OffGridColors.Ink),
-                visualTransformation = if (secret) PasswordVisualTransformation() else VisualTransformation.None,
+                visualTransformation = if (secret && !showSecret) PasswordVisualTransformation() else VisualTransformation.None,
                 keyboardOptions = KeyboardOptions(
                     autoCorrectEnabled = false,
                     keyboardType = if (secret) KeyboardType.Password else keyboardType,

@@ -2,6 +2,8 @@ package io.github.mnvkalyansambhana.offgridvault.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -23,6 +25,12 @@ import io.github.mnvkalyansambhana.offgridvault.ui.unlock.UnlockScreen
 import io.github.mnvkalyansambhana.offgridvault.ui.unlock.UnlockViewModel
 import io.github.mnvkalyansambhana.offgridvault.ui.vault.ChangePinScreen
 import io.github.mnvkalyansambhana.offgridvault.ui.vault.ChangePinViewModel
+import io.github.mnvkalyansambhana.offgridvault.ui.vault.EntryDetailScreen
+import io.github.mnvkalyansambhana.offgridvault.ui.vault.EntryDetailViewModel
+import io.github.mnvkalyansambhana.offgridvault.ui.vault.EntryEditScreen
+import io.github.mnvkalyansambhana.offgridvault.ui.vault.EntryEditViewModel
+import io.github.mnvkalyansambhana.offgridvault.ui.vault.AboutScreen
+import io.github.mnvkalyansambhana.offgridvault.ui.vault.SettingsScreen
 import io.github.mnvkalyansambhana.offgridvault.ui.vault.VaultHomeScreen
 
 private object Routes {
@@ -34,9 +42,17 @@ private object Routes {
     const val RECOVERY_LATER = "recovery-later"
     const val CHANGE_PIN = "change-pin"
     const val ERASE = "erase"
+    const val SETTINGS = "settings"
+    const val ABOUT = "about"
+    const val ENTRY = "entry/{id}"
+    const val EDIT = "edit/{id}"
+    const val NEW_ENTRY_ID = "new"
+
+    fun entry(id: String) = "entry/$id"
+    fun edit(id: String?) = "edit/${id ?: NEW_ENTRY_ID}"
 
     /** Screens that show or change vault content: leave them the moment the session locks. */
-    val NEEDS_UNLOCKED = setOf(VAULT, RECOVERY_LATER, CHANGE_PIN)
+    val NEEDS_UNLOCKED = setOf(VAULT, RECOVERY_LATER, CHANGE_PIN, SETTINGS, ABOUT, ENTRY, EDIT)
 }
 
 /** Single-activity navigation (T3). Destinations replace the back stack: no going "back" past a lock. */
@@ -94,11 +110,41 @@ fun AppNavHost(app: AppContainer) {
             VaultHomeScreen(
                 session = app.session,
                 hasRecovery = app.keys::hasRecovery,
-                onSetUpRecovery = { nav.navigate(Routes.RECOVERY_LATER) },
-                onChangePin = { nav.navigate(Routes.CHANGE_PIN) },
-                onLock = { nav.replaceWith(Routes.UNLOCK) },
+                onOpenEntry = { nav.navigate(Routes.entry(it)) },
+                onAdd = { nav.navigate(Routes.edit(null)) },
+                onSettings = { nav.navigate(Routes.SETTINGS) },
+                onLock = {
+                    app.session.lock()
+                    nav.replaceWith(Routes.UNLOCK)
+                },
             )
         }
+        composable(Routes.ENTRY) { backStack ->
+            val id = backStack.arguments?.getString("id").orEmpty()
+            val vm = viewModel(key = "entry-$id") { EntryDetailViewModel(app, id) }
+            EntryDetailScreen(vm, app.session, onBack = { nav.popBackStack() }, onEdit = { nav.navigate(Routes.edit(id)) })
+        }
+        composable(Routes.EDIT) { backStack ->
+            val id = backStack.arguments?.getString("id")?.takeIf { it != Routes.NEW_ENTRY_ID }
+            val vm = viewModel(key = "edit-${id ?: "new"}") { EntryEditViewModel(app, id) }
+            EntryEditScreen(vm, onDone = { nav.popBackStack() }, onCancel = { nav.popBackStack() })
+        }
+        composable(Routes.SETTINGS) {
+            val state by app.session.state.collectAsState()
+            val unlocked = state as? VaultSession.State.Unlocked
+            SettingsScreen(
+                hasRecoveryWords = unlocked?.let { app.keys.hasRecovery(it.header) } ?: true,
+                onBack = { nav.popBackStack() },
+                onChangePin = { nav.navigate(Routes.CHANGE_PIN) },
+                onSetUpRecovery = { nav.navigate(Routes.RECOVERY_LATER) },
+                onLockNow = {
+                    app.session.lock()
+                    nav.replaceWith(Routes.UNLOCK)
+                },
+                onAbout = { nav.navigate(Routes.ABOUT) },
+            )
+        }
+        composable(Routes.ABOUT) { AboutScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.RECOVERY_LATER) {
             val vm = viewModel { RecoveryLaterViewModel(app) }
             RecoveryLaterScreen(vm, onDone = { nav.popBackStack() }, onCancel = { nav.popBackStack() })

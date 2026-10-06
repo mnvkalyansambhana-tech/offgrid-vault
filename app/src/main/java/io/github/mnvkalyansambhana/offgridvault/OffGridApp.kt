@@ -49,6 +49,9 @@ class AppContainer(context: Context) {
     /** S23: locks on screen-off and after 5 minutes without interaction. */
     val sessionGuard = SessionGuard(context, session)
 
+    /** S11/S18: sensitive clips, cleared after 30 s or on lock. */
+    val clipboard = SecureClipboard(context, session)
+
     /** S22: a PIN, pattern or password screen lock is required. */
     fun isDeviceSecure(): Boolean = keyguard.isDeviceSecure
 }

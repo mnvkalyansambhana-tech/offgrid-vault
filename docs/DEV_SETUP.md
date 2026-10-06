@@ -86,8 +86,8 @@ JVM only (no device needed): `./gradlew :core:vault:testDebugUnitTest` — 22 te
 | 4 | Confirm PIN (P18) | Enter a PIN, then a different one on "confirm it." | "PINs didn't match" → back to "pick a pin." |
 | 5 | Words (S28, P19) | SHOW MY WORDS → try a screenshot; CONTINUE is disabled until you tick "I've saved them" | Screenshot blocked; tick enables CONTINUE |
 | 6 | Optional check (P19) | Tap "Check my words" → pick a wrong word, then the right ones (3 rounds) | "Not that one"; after 3 correct → "before you go." |
-| 6b | Skip (P19) | Second test install: on the intro tap "Set up later" → SKIP FOR NOW | Vault opens with the amber "No recovery words yet" banner |
-| 6c | Set up later (S28) | Banner → SET UP RECOVERY WORDS → wrong PIN, then right PIN → words → I understand | "not quite." first; then back on vault, banner gone |
+| 6b | Skip (P20) | Second test install: on the intro tap "Set up later" → SKIP FOR NOW | Vault opens with no banner; small amber dot on the Settings gear |
+| 6c | Set up later (S28, P20) | Gear → Settings → "recovery words · Not set up" → wrong PIN, then right PIN → words → I understand | "not quite." first; then the row shows green "Set up" and the gear dot is gone |
 | 7 | Seal + vault (P17) | Tap I UNDERSTAND | ~1 s "sealing your vault." → "vault." 0 logins |
 | 8 | Quit mid-setup (P17) | Second test install: quit (swipe away) while on the words screen, reopen | Back at Welcome — no vault was created |
 | 9 | PIN unlock | LOCK NOW → enter wrong PIN → right PIN | "not quite." → then "vault." |
@@ -120,3 +120,20 @@ Use a vault **with** recovery words written down (dummy data only).
 | 17 | "Lost your words?" | Locked-out vault **with** words → small link under USE RECOVERY WORDS; also on the 12-words screen | Opens the same erase screen |
 
 Not in M4: entries (M5), biometric (M6), autofill (M7).
+
+## M5 device tests (vault MVP) — dummy data only
+| # | Test | How | Expect |
+|---|---|---|---|
+| 1 | Add | Vault → + ADD → title, username, website, password → SAVE | Back on the list; "1 logins"; row shows title + username |
+| 2 | Generator (P10) | Edit → GENERATE → change length (−/+), toggle classes, ↻ → USE PASSWORD | 20 chars default; "~128 bits"; can't untick the last class; password lands in the field, **not** on the clipboard (paste elsewhere → nothing new) |
+| 3 | Reveal (S8/S10) | Open the login → eye | Password shown with "hides in 20s" + shrinking bar; auto-hides at 0; tap eye again → hides; reveal → switch apps → back → masked |
+| 4 | Copy (S11) | Copy password → paste into another app within 30 s; wait 30 s → paste again | First paste works; after 30 s the clipboard is empty. Android 13+: the "copied" pop-up shows no preview |
+| 5 | Copy + lock | Copy password → press power → wake, paste somewhere | Clipboard already empty (cleared on lock) |
+| 6 | History (C9, C15) | Edit → change password → SAVE (repeat 6×); then tap the eye / copy on a history row | HISTORY · 5 / 5, oldest dropped; eye shows that old password for 20 s ("hides in Ns"), copy puts it on the clipboard (cleared after 30 s) |
+| 7 | Clear history | CLEAR → confirm | History empty |
+| 8 | Notes | Add notes → save → open | Notes masked; eye reveals for 20 s |
+| 9 | Delete (P12) | Trash → confirm | Gone from the list; no recycle bin |
+| 10 | Search | Add 3 logins → type part of a title / username / website | List filters, case-insensitive |
+| 11 | Settings | Gear (toothed wheel) → recovery words / change PIN / lock now; App → about & privacy | Rows work; About shows Privacy (no internet, no data collected, stays on phone), Open source (GPL-3.0, repo), App (version) |
+| 12 | Restart | Force-stop → reopen → unlock | All logins still there |
+| 13 | Screenshots | Try on list / detail / edit / generator / dialogs | All blocked |
