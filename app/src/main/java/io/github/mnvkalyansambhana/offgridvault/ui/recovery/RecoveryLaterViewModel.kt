@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.mnvkalyansambhana.offgridvault.AppContainer
 import io.github.mnvkalyansambhana.offgridvault.core.crypto.wipe
+import io.github.mnvkalyansambhana.offgridvault.core.vault.PinGate
 import io.github.mnvkalyansambhana.offgridvault.core.vault.PinPolicy
 import io.github.mnvkalyansambhana.offgridvault.core.vault.VaultSession
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +31,8 @@ class RecoveryLaterViewModel(private val app: AppContainer) : ViewModel() {
     var busy by mutableStateOf(false)
         private set
     var wrongPin by mutableStateOf(false)
+        private set
+    var attemptsLeft by mutableIntStateOf(0)
         private set
 
     val recovery = RecoveryWordsState()
@@ -54,20 +57,25 @@ class RecoveryLaterViewModel(private val app: AppContainer) : ViewModel() {
         val pin = ByteArray(PinPolicy.LENGTH) { pinBuffer[it].code.toByte() }
         clearPin()
         viewModelScope.launch {
-            // M4: these attempts must count toward the S3 lockout too.
-            val unwrapped = withContext(Dispatchers.Default) {
+            // Counts toward the S3 lockout like any other PIN check (PinGate).
+            val result = withContext(Dispatchers.Default) {
                 try {
-                    app.keys.unwrapWithPin(unlocked.header, pin)
+                    app.gate.verify(unlocked.header, pin)
                 } finally {
                     pin.wipe()
                 }
             }
             busy = false
-            if (unwrapped == null) {
-                wrongPin = true
-            } else {
-                dek = unwrapped
-                step = Step.Words
+            when (result) {
+                is PinGate.VerifyResult.Correct -> {
+                    dek = result.dek
+                    step = Step.Words
+                }
+                is PinGate.VerifyResult.Wrong -> {
+                    wrongPin = true
+                    attemptsLeft = result.attemptsLeft
+                }
+                PinGate.VerifyResult.LockedOut -> app.session.lock() // navigation moves to the lockout screen
             }
         }
     }

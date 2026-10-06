@@ -25,26 +25,6 @@ class SetupUnlockTest {
 
     @get:Rule val tmp = TemporaryFolder()
 
-    /** Stand-in for Keystore: AES-GCM under a key that "lives on this device". */
-    private class FakeDevice : DeviceSealer {
-        val key = AesGcm.newKey()
-        var gone = false
-        override fun seal(plaintext: ByteArray, associatedData: ByteArray) =
-            if (gone) throw DeviceKeyUnavailableException() else AesGcm.encrypt(key, plaintext, associatedData)
-        override fun open(sealed: ByteArray, associatedData: ByteArray) =
-            if (gone) throw DeviceKeyUnavailableException() else AesGcm.decrypt(key, sealed, associatedData)
-    }
-
-    /** Fast deterministic KDF stand-in (real Argon2id is covered in :core:crypto). */
-    private val fastArgon2 = Argon2id(
-        Argon2Engine { out, password, salt, iterations, memory ->
-            val digest = MessageDigest.getInstance("SHA-256")
-            digest.update(password); digest.update(salt); digest.update("$iterations/$memory".toByteArray())
-            digest.digest().copyInto(out)
-            true
-        },
-    )
-
     private val device = FakeDevice()
     private val dir: File get() = tmp.root
     private val repo get() = VaultRepository(VaultStore(dir))

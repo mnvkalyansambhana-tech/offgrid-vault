@@ -50,6 +50,26 @@ class VaultRepository(private val store: VaultStore) {
         return store.hasAnyVault()
     }
 
+    /**
+     * The header of the current (else previous) file, parsed but **not authenticated** — for UI
+     * decisions only (e.g. "are recovery words set up?"), never for security decisions.
+     */
+    fun peekHeader(): VaultHeader? {
+        store.recoverInterruptedSave()
+        for (bytes in listOf(store.readCurrent(), store.readPrevious())) {
+            bytes ?: continue
+            try {
+                return VaultFormat.parse(bytes).header
+            } catch (_: CorruptVaultException) {
+            } catch (_: UnsupportedVaultVersionException) {
+            }
+        }
+        return null
+    }
+
+    /** S30 "erase and start over": the vault files are gone; [hasVault] becomes false. */
+    fun eraseAll() = store.eraseAll()
+
     fun open(unlocker: Unlocker): OpenResult {
         store.recoverInterruptedSave()
         if (!store.hasAnyVault()) return OpenResult.NoVault

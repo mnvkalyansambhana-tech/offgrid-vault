@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 /**
  * The single source of truth for "is the vault open?" (T3), shared by the UI and — later — the
  * autofill service. Locking closes the session key and drops every reference to vault content.
- * Auto-lock timers (S23) arrive in M4.
+ * Auto-lock (S23) is driven by the app (screen-off receiver + [SessionTimeout]).
  */
 class VaultSession {
 
@@ -23,15 +23,19 @@ class VaultSession {
             val key: AeadKey,
             /** Opened from vault.prev — show "Restored from previous save" once (C18). */
             val restoredFromPrevious: Boolean,
+            /** Wrong PINs since the last unlock — show "N wrong PIN attempts…" once (S12). */
+            val failedAttemptsBefore: Int = 0,
         ) : State
     }
 
     private val mutableState = MutableStateFlow<State>(State.Locked)
     val state: StateFlow<State> = mutableState.asStateFlow()
 
-    fun unlocked(opened: VaultRepository.OpenResult.Opened) {
+    fun unlocked(opened: VaultRepository.OpenResult.Opened, failedAttemptsBefore: Int = 0) {
         lock()
-        mutableState.value = State.Unlocked(opened.vault, opened.header, opened.key, opened.restoredFromPrevious)
+        mutableState.value = State.Unlocked(
+            opened.vault, opened.header, opened.key, opened.restoredFromPrevious, failedAttemptsBefore,
+        )
     }
 
     /** After a save: same key, new header and/or content. */

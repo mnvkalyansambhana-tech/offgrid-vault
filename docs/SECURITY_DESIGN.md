@@ -36,7 +36,10 @@ K_device and K_bio: `setUnlockedDeviceRequired(true)` — **conditional on devic
 - **Unlock with PIN:** check attempt counter → increment & persist synchronously (S17) → Argon2id(PIN) → unwrap with KEK_pin and K_device → DEK.
 - **Unlock with biometric:** BiometricPrompt + CryptoObject on K_bio → DEK. If K_bio is invalidated (new fingerprint), fall back to PIN and re-create copy #2.
 - **Recovery:** enter 12 words → HKDF → unwrap copy #3 (also needs K_device) → DEK → user sets new PIN → re-wrap copy #1 → reset counter. Words are unchanged.
+- **Attempt counter (implemented M4, `PinAttempts`/`PinGate`):** own file `pin.attempts`, written + fsynced *before* each PIN check (S17); unreadable → locked out (S29). Unlock, Change PIN and "set up recovery words later" share one 3-strike budget; once locked out no PIN is tried at all.
+- **Recovery → new PIN (M4, `PinReset`):** words → DEK → new PIN with new salt + fresh calibration → sensitive save (C18) → counter reset. A vault without recovery words stays locked (S6).
 - **After 3 wrong PINs:** copies #1 and #2 are disabled until recovery succeeds.
+- **Erase & start over (S30, M4):** user-initiated only (lockout / recovery screens), typed `ERASE` + the phone's screen-lock credential (system prompt). Order: lock session → delete K_device → delete vault files → delete counter. After K_device is gone no copy of the old vault can ever be opened.
 - **Successful unlock** (PIN or biometric) resets the counter to 0 and, if it was > 0, shows "N wrong PIN attempts since your last unlock" (S12).
 - Changing the PIN re-wraps copy #1 (new salt, re-calibrated Argon2id `t`). Because the header is AAD, this is a normal full save (payload re-encrypted under the same DEK, fresh nonce) and is written twice so `vault.prev` holds no old-PIN copy (C16, C18).
 

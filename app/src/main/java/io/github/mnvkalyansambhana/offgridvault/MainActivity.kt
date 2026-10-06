@@ -11,6 +11,12 @@ import io.github.mnvkalyansambhana.offgridvault.ui.theme.OffGridTheme
 
 class MainActivity : ComponentActivity() {
 
+    /** Any touch or key press counts as activity for the 5-minute auto-lock (S23). */
+    override fun onUserInteraction() {
+        super.onUserInteraction()
+        container.sessionGuard.touch()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         SecureWindow.apply(this)

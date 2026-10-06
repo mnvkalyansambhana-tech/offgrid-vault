@@ -7,21 +7,22 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.mnvkalyansambhana.offgridvault.AppContainer
-import io.github.mnvkalyansambhana.offgridvault.core.crypto.DeviceKeyUnavailableException
 import io.github.mnvkalyansambhana.offgridvault.core.crypto.wipe
+import io.github.mnvkalyansambhana.offgridvault.core.vault.PinGate.UnlockResult
 import io.github.mnvkalyansambhana.offgridvault.core.vault.PinPolicy
-import io.github.mnvkalyansambhana.offgridvault.core.vault.VaultRepository.OpenResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/**
- * PIN unlock, happy path (M3). Attempt counting and the 3-strike lockout (S3, S12, S17) are
- * M4; recovery words are M4; biometric is M6.
- */
+/** PIN unlock through [io.github.mnvkalyansambhana.offgridvault.core.vault.PinGate] (S3, S12, S17, S22). */
 class UnlockViewModel(private val app: AppContainer) : ViewModel() {
 
-    enum class Problem { WrongPin, NoScreenLock, DeviceKeyLost, Unreadable }
+    sealed interface Problem {
+        data class WrongPin(val attemptsLeft: Int) : Problem
+        data object NoScreenLock : Problem
+        data object DeviceKeyLost : Problem
+        data object Unreadable : Problem
+    }
 
     var pinLength by mutableIntStateOf(0)
         private set
@@ -37,41 +38,40 @@ class UnlockViewModel(private val app: AppContainer) : ViewModel() {
         else if (problem == Problem.NoScreenLock) problem = null
     }
 
-    fun digit(d: Char, onUnlocked: () -> Unit, onNoVault: () -> Unit) {
+    fun digit(d: Char, nav: Navigation) {
         if (busy || pinLength >= PinPolicy.LENGTH || problem == Problem.NoScreenLock) return
-        if (problem == Problem.WrongPin) problem = null
+        if (problem is Problem.WrongPin) problem = null
         pinBuffer[pinLength++] = d
-        if (pinLength == PinPolicy.LENGTH) verify(onUnlocked, onNoVault)
+        if (pinLength == PinPolicy.LENGTH) verify(nav)
     }
 
     fun deleteDigit() {
         if (!busy && pinLength > 0) pinBuffer[--pinLength] = '\u0000'
     }
 
-    private fun verify(onUnlocked: () -> Unit, onNoVault: () -> Unit) {
+    private fun verify(nav: Navigation) {
         busy = true
         val pin = ByteArray(PinPolicy.LENGTH) { pinBuffer[it].code.toByte() }
         clearPin()
         viewModelScope.launch {
             val result = withContext(Dispatchers.Default) {
                 try {
-                    app.repository.open { header -> app.keys.unwrapWithPin(header, pin) }
-                } catch (_: DeviceKeyUnavailableException) {
-                    null
+                    app.gate.unlock(pin)
                 } finally {
                     pin.wipe()
                 }
             }
             busy = false
             when (result) {
-                is OpenResult.Opened -> {
-                    app.session.unlocked(result)
-                    onUnlocked()
+                is UnlockResult.Unlocked -> {
+                    app.session.unlocked(result.opened, result.previousFailures)
+                    nav.onUnlocked()
                 }
-                OpenResult.Rejected -> problem = Problem.WrongPin
-                OpenResult.NoVault -> onNoVault()
-                is OpenResult.Unreadable -> problem = Problem.Unreadable
-                null -> problem = Problem.DeviceKeyLost
+                is UnlockResult.Wrong -> problem = Problem.WrongPin(result.attemptsLeft)
+                UnlockResult.LockedOut -> nav.onLockedOut()
+                UnlockResult.NoVault -> nav.onNoVault()
+                UnlockResult.Unreadable -> problem = Problem.Unreadable
+                UnlockResult.DeviceKeyLost -> problem = Problem.DeviceKeyLost
             }
         }
     }
@@ -82,4 +82,10 @@ class UnlockViewModel(private val app: AppContainer) : ViewModel() {
     }
 
     override fun onCleared() = clearPin()
+
+    interface Navigation {
+        fun onUnlocked()
+        fun onLockedOut()
+        fun onNoVault()
+    }
 }

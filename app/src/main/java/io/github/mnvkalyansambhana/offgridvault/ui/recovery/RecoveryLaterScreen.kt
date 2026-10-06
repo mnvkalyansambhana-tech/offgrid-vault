@@ -23,7 +23,7 @@ fun RecoveryLaterScreen(vm: RecoveryLaterViewModel, onDone: () -> Unit, onCancel
                     label = "Recovery words",
                     supporting = when {
                         vm.busy -> "checking…"
-                        vm.wrongPin -> "Wrong PIN. Try again."
+                        vm.wrongPin -> "Wrong PIN · ${vm.attemptsLeft} left before the vault locks"
                         else -> "only you can create recovery words for this vault"
                     },
                 ) {

@@ -95,3 +95,28 @@ JVM only (no device needed): `./gradlew :core:vault:testDebugUnitTest` — 22 te
 | 11 | **S21 lab** | Open **OGV Keystore lab**: 1 Create → 2 Test → change phone screen lock (e.g. new PIN) → 2 Test → **remove** screen lock → 2 Test → set a lock again → 2 Test | Send the log: decides whether K_device gets `setUnlockedDeviceRequired(true)` |
 
 Not in M3 yet: attempt limit/lockout and recovery-words unlock (M4), auto-lock (M4), entries (M5).
+
+## M4 device tests (lockout, recovery, session)
+Use a vault **with** recovery words written down (dummy data only).
+
+| # | Test | How | Expect |
+|---|---|---|---|
+| 1 | Attempts left | Lock now → wrong PIN twice | "Wrong PIN · 2 attempts left", then "1 attempt left. After that, only your recovery words can unlock." |
+| 2 | Notice (S12) | Then the right PIN | Vault shows amber "2 wrong PIN attempts since your last unlock" (✕ dismisses) |
+| 3 | Lockout (S3) | Lock now → 3 wrong PINs | "vault locked." 3/3 screen with USE RECOVERY WORDS |
+| 4 | Kill-app bypass (S17) | Wrong PIN, then force-stop immediately (`adb shell am force-stop io.github.mnvkalyansambhana.offgridvault.debug`), reopen | The attempt still counted (e.g. "1 attempt left" on the next wrong PIN) |
+| 5 | Lockout survives restart | While locked out: force-stop, reopen | Opens on the lockout screen, not the PIN pad |
+| 6 | Recovery → new PIN | USE RECOVERY WORDS → enter the 12 words (try pasting all 12 into box 01) → new PIN + confirm | Vault opens; old PIN now rejected, new PIN works |
+| 7 | Wrong words | Enter 12 valid words that aren't yours | "These words don't match this vault." |
+| 8 | Forgot PIN? | From the normal unlock screen | Same recovery flow works without being locked out |
+| 9 | Change PIN (S24) | Vault → Change PIN → wrong current PIN → right one → new PIN | "Wrong PIN · N left…", then saved; next unlock needs the new PIN |
+| 10 | Screen-off lock (S23) | Unlock → press power → wake | Unlock screen |
+| 11 | App switch doesn't lock | Unlock → switch to another app for 1 min → back | Still unlocked |
+| 12 | 5-min timeout | Unlock, leave the phone untouched (screen kept on via Developer options → Stay awake while charging, or just wait in another app) ≥ 5 min | Back on the unlock screen |
+| 13 | No-recovery vault (S6→S30) | Test install with "Set up later" → 3 wrong PINs | Lockout screen: "This vault stays locked" + ERASE VAULT & START OVER |
+| 14 | Erase guard (S30) | Erase screen: type `erase` (lowercase) | Button stays disabled until exactly `ERASE` |
+| 15 | Erase needs phone lock | Type ERASE → ERASE EVERYTHING → cancel the system prompt | "Screen lock not confirmed — nothing was erased." |
+| 16 | Erase | Again → confirm with the phone's PIN/pattern | Back at Welcome; fresh setup works; old vault gone |
+| 17 | "Lost your words?" | Locked-out vault **with** words → small link under USE RECOVERY WORDS; also on the 12-words screen | Opens the same erase screen |
+
+Not in M4: entries (M5), biometric (M6), autofill (M7).

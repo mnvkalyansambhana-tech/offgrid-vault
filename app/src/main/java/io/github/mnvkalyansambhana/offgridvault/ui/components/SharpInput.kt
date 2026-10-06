@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -41,6 +42,7 @@ fun SharpInput(
     secret: Boolean = false,
     isError: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Text,
+    capitalization: KeyboardCapitalization = KeyboardCapitalization.None,
 ) {
     var focused by remember { mutableStateOf(false) }
     val borderColor = when {
@@ -69,6 +71,7 @@ fun SharpInput(
                 keyboardOptions = KeyboardOptions(
                     autoCorrectEnabled = false,
                     keyboardType = if (secret) KeyboardType.Password else keyboardType,
+                    capitalization = capitalization,
                 ),
             )
         }

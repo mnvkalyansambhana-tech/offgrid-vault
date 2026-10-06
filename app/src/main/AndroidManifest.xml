@@ -8,6 +8,10 @@
         android:name="android.permission.INTERNET"
         tools:node="remove" />
 
+    <!-- System screen-lock prompt (S30 erase confirmation; fingerprint unlock in M6).
+         Normal permission: no runtime dialog, no network. -->
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+
     <!-- allowBackup=false + fullBackupContent block backup up to Android 11. dataExtractionRules
          is required on Android 12+, where allowBackup=false does NOT stop
          device-to-device transfer. hasFragileUserData=false: uninstall never offers

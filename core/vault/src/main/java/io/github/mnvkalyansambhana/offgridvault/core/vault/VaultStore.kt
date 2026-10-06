@@ -61,6 +61,11 @@ class VaultStore(private val directory: File, private val files: FileOps = FileO
         files.moveAtomically(pendingPrevious, previous)
     }
 
+    /** S30: deletes every vault file (current, previous, any save in progress). */
+    fun eraseAll() {
+        listOf(pending, pendingPrevious, current, previous).forEach(files::delete)
+    }
+
     /** File operations, injectable so tests can simulate a crash at any step. */
     interface FileOps {
         fun read(file: File): ByteArray?
