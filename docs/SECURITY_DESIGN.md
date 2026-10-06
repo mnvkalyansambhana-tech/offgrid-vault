@@ -31,6 +31,8 @@
 
 K_device and K_bio: `setUnlockedDeviceRequired(true)` — **conditional on device tests** that K_device survives screen-lock change/removal (S21). Losing K_device makes the vault and recovery words permanently useless.
 
+- **Wrapping (implemented M3, `VaultKeys`):** `inner = AES-GCM(KEK, DEK, ad = "offgrid-vault/v1/wrap/<pin|recovery>" ‖ salt)`, `outer = K_device.seal(inner, ad = label)`. Wrong PIN/words → inner fails (rejected); modified blob → outer fails (file treated as corrupt → `vault.prev`); K_device missing → "can't open on this device".
+- **K_device (M3, `DeviceKey`):** alias `offgridvault.k_device.v1`, AES-256-GCM, StrongBox → TEE fallback, no user auth, `setUnlockedDeviceRequired(false)` until S21 lab results.
 - **Unlock with PIN:** check attempt counter → increment & persist synchronously (S17) → Argon2id(PIN) → unwrap with KEK_pin and K_device → DEK.
 - **Unlock with biometric:** BiometricPrompt + CryptoObject on K_bio → DEK. If K_bio is invalidated (new fingerprint), fall back to PIN and re-create copy #2.
 - **Recovery:** enter 12 words → HKDF → unwrap copy #3 (also needs K_device) → DEK → user sets new PIN → re-wrap copy #1 → reset counter. Words are unchanged.
@@ -46,26 +48,27 @@ K_device and K_bio: `setUnlockedDeviceRequired(true)` — **conditional on devic
 | Vault + key wrapping | AES-256-GCM, fresh random 96-bit nonce per encryption, never reused |
 | Hardware keys | Android Keystore (StrongBox if available) |
 
-## 4. Vault file format (v1, draft)
+## 4. Vault file format (v1 — implemented in M2, `:core:vault`)
 ```
-[magic "PVLT"] [format_version] [generation]
-[argon2id params + salt] [recovery_salt] [wrapped_key_pin] [wrapped_key_bio?] [wrapped_key_recovery]
-[nonce] [AES-256-GCM ciphertext of Protobuf Vault message] [GCM tag]
+"PVLT" | format_version u16 | header_len u32 | header (Wire VaultHeader) | AES-256-GCM payload
+\_______________________ associated data (whole prefix, C6) _______________/
 ```
-- The entire header is passed as **AEAD associated data** → any header tampering fails decryption.
-- Payload: Protobuf (`Vault { repeated Entry }`, `Entry { id, title, username, urls[], linked_apps[{package, cert_sha256}], password, notes, history[≤5], created, updated }`). History is capped at 5 (C15) and can be cleared per entry.
-- Older `format_version` → migrate on open and re-save.
-- `generation` increments on every save; used only to order `vault.bin` vs `vault.prev` (C17).
+- **Header** (`vault.proto` → `VaultHeader`): `generation`, `argon2_iterations`, `argon2_memory_kib`, `pin_salt` (16 B), `recovery_salt` (16 B, C19), `wrapped_key_pin`, `wrapped_key_recovery`, `wrapped_key_bio` (empty when off). Stored in clear, authenticated as AAD.
+- **Payload**: `nonce(12) ‖ ciphertext ‖ tag(16)` of Wire `Vault { repeated Entry }`, `Entry { id, title, username, urls[], linked_apps[{package_name, cert_sha256}], password, notes, history[≤5]{password, replaced_at}, created_at, updated_at }`. All personal fields carry `(offgridvault.redacted)` → `toString()` prints `██` (T7).
+- **Parse before decrypt** (needed to unlock): header is range-checked first — file ≤ 64 MiB, header ≤ 16 KiB, Argon2 params via `Argon2Params` (C14 floor), exact salt sizes, wrapped keys 1–1024 B. It is trusted only after payload decryption succeeds.
+- **Versions**: newer `format_version` → `Unreadable(newerFormatVersion)` (never misparsed); older → migration hook in `VaultFormat.parse`, then re-save.
+- Field numbers are permanent; new fields only.
 
-## 5. Saving & rollback
-- Write `vault.tmp` → fsync → atomic rename to `vault.bin` (Android `AtomicFile`). Keep previous good file as `vault.prev`.
-- Any header change (PIN change, biometric add/remove, recovery reset, recalibration) is a normal full save (C16).
-- **Open:** try `vault.bin`; only if it fails to decrypt/parse, try `vault.prev`; on success warn "Restored from previous save — your last change may be missing" and re-save immediately (C18).
-- **Security-sensitive saves are written twice** so `vault.prev` holds no stale secret: PIN change, recovery reset, biometric removal, entry delete, clear history (C18).
-- No separate rollback counter: file rollback needs root / FBE bypass, which is out of scope (C17). Residual: flash wear-levelling may retain old *encrypted* blocks.
+## 5. Saving & rollback (implemented in M2)
+- **Save**: write + fsync `vault.tmp` → rename `vault.bin` → `vault.prev` → rename `vault.tmp` → `vault.bin` (atomic renames; same guarantees as `AtomicFile`, plain NIO so every crash point is tested). Every save re-seals the header with `generation + 1` (C16, C17).
+- **Interrupted save** (on open): `vault.tmp` + `vault.prev` without `vault.bin` → the crash hit between the renames and the temp file is complete → promote it. Any other leftover temp file is incomplete → delete.
+- **Open**: `vault.bin` first; only if it is missing, unparseable or fails to decrypt with an unlocked DEK → `vault.prev`; on success the app shows "Restored from previous save — your last change may be missing" and **both files are re-saved immediately** (C18).
+- **Sensitive saves** (PIN change, recovery reset, biometric removal, entry delete, clear history): after the save, `vault.prev` is overwritten with a copy of the new `vault.bin` — C18's "written twice", without a second encryption.
+- A credential rejected by `vault.bin` is not retried on an identical `vault.prev` header (no second Argon2 run).
+- No separate rollback counter: file rollback needs root / FBE bypass, which is out of scope (C17). Residual: flash wear-levelling may retain old *encrypted* blocks; the directory is not fsynced after rename (same as `AtomicFile`).
 
 ## 6. Runtime protections
-- Auto-lock after 5 minutes of **inactivity**, immediately on screen-off; switching apps does not lock (S23). Session key and DEK wiped from memory on lock — **best effort**: the JVM/ART may copy arrays and `SecretKeySpec` copies key bytes, so wiping can't be guaranteed (S25).
+- Auto-lock after 5 minutes of **inactivity**, immediately on screen-off; switching apps does not lock (S23). DEK held as one `AeadKey` per session and closed on lock (M2); wiping is **best effort**: the JVM/ART may copy arrays and `SecretKeySpec` copies key bytes, so wiping can't be guaranteed (S25).
 - Secrets (passwords, history) kept encrypted in memory with an ephemeral session key; decrypted only on reveal/copy/autofill.
 - Reveal auto-masks after 20 s (timer restarts on each tap, S10) and immediately on backgrounding / screen-off. Clipboard cleared after 30 s or on vault lock, whichever first (S11) via `clearPrimaryClip()` without reading first; a persisted "pending clear" flag clears on next start if the process died (S18); mark clip as sensitive (`ClipDescription.EXTRA_IS_SENSITIVE`).
 - Tapjacking protection (`filterTouchesWhenObscured`) on sensitive views.

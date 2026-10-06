@@ -1,0 +1,44 @@
+package io.github.mnvkalyansambhana.offgridvault
+
+import android.app.Application
+import android.app.KeyguardManager
+import android.content.Context
+import io.github.mnvkalyansambhana.offgridvault.core.crypto.AndroidSodium
+import io.github.mnvkalyansambhana.offgridvault.core.crypto.Argon2Calibrator
+import io.github.mnvkalyansambhana.offgridvault.core.crypto.DeviceKey
+import io.github.mnvkalyansambhana.offgridvault.core.vault.RecoveryEnrollment
+import io.github.mnvkalyansambhana.offgridvault.core.vault.VaultKeys
+import io.github.mnvkalyansambhana.offgridvault.core.vault.VaultRepository
+import io.github.mnvkalyansambhana.offgridvault.core.vault.VaultSession
+import io.github.mnvkalyansambhana.offgridvault.core.vault.VaultSetup
+import io.github.mnvkalyansambhana.offgridvault.core.vault.VaultStore
+import java.io.File
+
+class OffGridApp : Application() {
+    lateinit var container: AppContainer
+        private set
+
+    override fun onCreate() {
+        super.onCreate()
+        container = AppContainer(this)
+    }
+}
+
+/** Manual dependency injection (T5): every long-lived object, created once per process. */
+class AppContainer(context: Context) {
+    private val keyguard = context.getSystemService(KeyguardManager::class.java)
+
+    /** The vault lives in no-backup, credential-encrypted app storage. */
+    val repository = VaultRepository(VaultStore(File(context.noBackupFilesDir, "vault")))
+    val session = VaultSession()
+    val deviceKey = DeviceKey()
+    val keys by lazy { VaultKeys(AndroidSodium.argon2id, deviceKey) }
+    val calibrator by lazy { Argon2Calibrator(AndroidSodium.argon2id) }
+    val setup by lazy { VaultSetup(repository, keys) { deviceKey.ensureExists() } }
+    val enrollment by lazy { RecoveryEnrollment(repository, keys) }
+
+    /** S22: a PIN, pattern or password screen lock is required. */
+    fun isDeviceSecure(): Boolean = keyguard.isDeviceSecure
+}
+
+val Context.container: AppContainer get() = (applicationContext as OffGridApp).container

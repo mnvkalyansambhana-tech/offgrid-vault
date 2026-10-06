@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+// OffGrid Vault file format v1 (SECURITY_DESIGN.md §4). Field numbers are permanent:
+// never reuse or renumber; add new fields instead.
+package offgridvault.vault.v1;
+
+option java_package = "io.github.mnvkalyansambhana.offgridvault.core.vault.proto";
+
+import "offgridvault/options.proto";
+
+// Stored in clear but authenticated: the exact header bytes are AES-GCM associated data
+// for the payload (C6). Read before decryption, so every field is range-checked on parse.
+message VaultHeader {
+  // Increments on every save; orders vault.bin vs vault.prev (C17).
+  uint64 generation = 1;
+
+  // Argon2id for the PIN copy (C14). Parallelism is always 1.
+  uint32 argon2_iterations = 2;
+  uint32 argon2_memory_kib = 3;
+  bytes pin_salt = 4;
+
+  // HKDF salt for the recovery copy (C19).
+  bytes recovery_salt = 5;
+
+  // The DEK wrapped once per unlock method (C3). Opaque here; produced in M3.
+  bytes wrapped_key_pin = 6;
+  bytes wrapped_key_recovery = 7;
+  // Empty when biometric unlock is off (S2).
+  bytes wrapped_key_bio = 8;
+}
+
+// Encrypted payload.
+message Vault {
+  repeated Entry entries = 1;
+}
+
+message Entry {
+  // Random, non-secret identifier.
+  string id = 1;
+  string title = 2 [(offgridvault.redacted) = true];
+  string username = 3 [(offgridvault.redacted) = true];
+  // Websites, matched on eTLD+1 (S14).
+  repeated string urls = 4 [(offgridvault.redacted) = true];
+  // Apps linked with "Remember for this app" (S13, S15).
+  repeated LinkedApp linked_apps = 5;
+  bytes password = 6 [(offgridvault.redacted) = true];
+  bytes notes = 7 [(offgridvault.redacted) = true];
+  // Previous passwords, newest first, at most 5 (C9, C15).
+  repeated PasswordHistoryItem history = 8;
+  int64 created_at_millis = 9;
+  int64 updated_at_millis = 10;
+}
+
+message LinkedApp {
+  string package_name = 1 [(offgridvault.redacted) = true];
+  // SHA-256 of the app's signing certificate (S13).
+  bytes cert_sha256 = 2;
+}
+
+message PasswordHistoryItem {
+  bytes password = 1 [(offgridvault.redacted) = true];
+  int64 replaced_at_millis = 2;
+}

@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.compose) apply false
+    alias(libs.plugins.wire) apply false
 }
 
 // T13: every resolved configuration is pinned in gradle.lockfile; refresh with

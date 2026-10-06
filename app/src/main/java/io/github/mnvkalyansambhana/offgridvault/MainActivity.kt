@@ -6,8 +6,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import io.github.mnvkalyansambhana.offgridvault.ui.AppNavHost
 import io.github.mnvkalyansambhana.offgridvault.ui.theme.OffGridTheme
-import io.github.mnvkalyansambhana.offgridvault.ui.welcome.WelcomeScreen
 
 class MainActivity : ComponentActivity() {
 
@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
         )
         setContent {
             OffGridTheme {
-                WelcomeScreen(onSetUp = {})
+                AppNavHost(container)
             }
         }
     }

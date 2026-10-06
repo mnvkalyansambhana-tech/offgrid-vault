@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+package offgridvault;
+
+import "google/protobuf/descriptor.proto";
+
+extend google.protobuf.FieldOptions {
+  // Wire redacts any field carrying a boolean option named `redacted`: the generated
+  // toString() prints "██" instead of the value (T7: secrets never reach logs).
+  optional bool redacted = 51001;
+}

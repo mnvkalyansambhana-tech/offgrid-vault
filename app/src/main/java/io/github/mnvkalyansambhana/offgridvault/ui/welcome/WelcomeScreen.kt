@@ -2,6 +2,7 @@ package io.github.mnvkalyansambhana.offgridvault.ui.welcome
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
@@ -36,11 +38,11 @@ import io.github.mnvkalyansambhana.offgridvault.ui.theme.OffGridTheme
 import io.github.mnvkalyansambhana.offgridvault.ui.theme.OffGridType
 
 /**
- * M0 shell: the locked "Pop · Welcome" screen (design/screens/pop/PopWelcome.dc.html).
- * Setup and the screen-lock check (S22) arrive in M3.
+ * "Pop · Welcome" (design/screens/pop/PopWelcome.dc.html). Setup is only possible with a
+ * secure screen lock (S22); otherwise the user is sent to Settings.
  */
 @Composable
-fun WelcomeScreen(onSetUp: () -> Unit) {
+fun WelcomeScreen(deviceSecure: Boolean, onSetUp: () -> Unit, onOpenSecuritySettings: () -> Unit) {
     Column(Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -74,10 +76,29 @@ fun WelcomeScreen(onSetUp: () -> Unit) {
             Feature("02", "no account. no cloud. no tracking.")
             Feature("03", "uninstall = vault erased forever", OffGridColors.CoralDeep)
             Spacer(Modifier.weight(1f))
-            SharpCard(Modifier.fillMaxWidth()) {
-                Label("Phone screen lock · checked at setup", style = OffGridType.LabelSmall)
+            SharpCard(
+                Modifier
+                    .fillMaxWidth()
+                    .then(if (deviceSecure) Modifier else Modifier.clickable(role = Role.Button, onClick = onOpenSecuritySettings)),
+            ) {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    Label("Phone screen lock", style = OffGridType.LabelSmall)
+                    Label(
+                        if (deviceSecure) "● On" else "● Off",
+                        color = if (deviceSecure) OffGridColors.Green else OffGridColors.CoralDeep,
+                        style = OffGridType.LabelSmall,
+                    )
+                }
+                if (!deviceSecure) {
+                    Body("Set a PIN, pattern or password for your phone first. Tap to open Settings.", color = OffGridColors.CoralDeep)
+                }
             }
-            PopButton(text = "Set up vault →", onClick = onSetUp, modifier = Modifier.fillMaxWidth())
+            PopButton(
+                text = "Set up vault →",
+                onClick = onSetUp,
+                enabled = deviceSecure,
+                modifier = Modifier.fillMaxWidth(),
+            )
         }
     }
 }
@@ -93,5 +114,5 @@ private fun Feature(number: String, text: String, color: Color = OffGridColors.T
 @Preview(widthDp = 390, heightDp = 844)
 @Composable
 private fun WelcomePreview() {
-    OffGridTheme { WelcomeScreen(onSetUp = {}) }
+    OffGridTheme { WelcomeScreen(deviceSecure = false, onSetUp = {}, onOpenSecuritySettings = {}) }
 }

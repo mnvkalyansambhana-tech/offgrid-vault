@@ -13,6 +13,7 @@
          device-to-device transfer. hasFragileUserData=false: uninstall never offers
          to keep data (P5: uninstall erases the vault). -->
     <application
+        android:name=".OffGridApp"
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"

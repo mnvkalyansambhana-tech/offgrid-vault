@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.wire)
 }
 
 // Vault file format, storage and session (M2+, T4).
@@ -19,6 +20,16 @@ android {
     }
 }
 
+// T7: Kotlin classes generated from src/main/proto.
+wire {
+    kotlin {}
+}
+
 dependencies {
+    // Exposed in the public API (AeadKey, Argon2Params, generated Vault types).
+    api(project(":core:crypto"))
+    api(libs.wire.runtime)
+    api(libs.kotlinx.coroutines.core)
+
     testImplementation(libs.junit)
 }

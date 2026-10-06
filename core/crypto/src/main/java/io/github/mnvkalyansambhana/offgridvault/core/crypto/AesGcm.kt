@@ -47,13 +47,47 @@ object AesGcm {
         }
     }
 
-    private fun aead(key: ByteArray): Aead {
+    internal fun aead(key: ByteArray): Aead {
         require(key.size == KEY_BYTES) { "AES-256-GCM needs a $KEY_BYTES-byte key" }
         val tinkKey = AesGcmKey.builder()
             .setParameters(parameters)
             .setKeyBytes(SecretBytes.copyFrom(key, InsecureSecretKeyAccess.get()))
             .build()
         return AesGcmJce.create(tinkKey)
+    }
+}
+
+/**
+ * A long-lived AES-256-GCM key, e.g. the DEK for one unlocked session. Copies the key into
+ * Tink once instead of on every call (fewer un-wipeable copies, S25). [close] on lock drops
+ * the only reference so the key material becomes unreachable; it cannot be zeroed inside Tink.
+ */
+class AeadKey private constructor(private var aead: Aead?) : AutoCloseable {
+
+    fun encrypt(plaintext: ByteArray, associatedData: ByteArray): ByteArray =
+        live().encrypt(plaintext, associatedData)
+
+    /** @throws DecryptionFailedException on any mismatch, with no detail. */
+    fun decrypt(ciphertext: ByteArray, associatedData: ByteArray): ByteArray {
+        if (ciphertext.size < AesGcm.OVERHEAD_BYTES) throw DecryptionFailedException()
+        return try {
+            live().decrypt(ciphertext, associatedData)
+        } catch (_: GeneralSecurityException) {
+            throw DecryptionFailedException()
+        }
+    }
+
+    val isClosed: Boolean get() = aead == null
+
+    override fun close() {
+        aead = null
+    }
+
+    private fun live(): Aead = checkNotNull(aead) { "AeadKey used after close (vault locked)" }
+
+    companion object {
+        /** Wraps [key] and wipes the caller's copy. */
+        fun takeOwnership(key: ByteArray): AeadKey = key.useAndWipe { AeadKey(AesGcm.aead(it)) }
     }
 }
 

@@ -104,5 +104,8 @@ dependencies {
     implementation(libs.compose.foundation)
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     debugImplementation(libs.compose.ui.tooling)
 }

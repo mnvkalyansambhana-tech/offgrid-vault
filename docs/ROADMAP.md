@@ -12,8 +12,8 @@ Rules for every milestone:
 |---|---|---|---|
 | M0 | Foundation & guardrails ✅ *code done 2026-10-03 — awaiting device test + Play Console* | Internal | Empty shell |
 | M1 | Crypto core ✅ *done 2026-10-03 — 34 JVM + 3 on-device tests pass; Pixel 9a bench t=16 ≈ 0.6 s (cheap-phone floor check still open)* | Internal | Debug-only benchmark screen |
-| M2 | Vault file format & storage | Internal | No |
-| M3 | Setup & PIN unlock (happy path) | Internal | Yes |
+| M2 | Vault file format & storage ✅ *code done 2026-10-05 — 22 JVM tests incl. crash at every save step* | Internal | No |
+| M3 | Setup & PIN unlock (happy path) ✅ *code done 2026-10-05 — 70 JVM tests pass; awaiting device tests + S21 lab result* | Internal | Yes |
 | M4 | Lockout, recovery & session | Internal | Yes |
 | M5 | Vault MVP (entries, reveal, copy, generator) | **Closed test starts** | Yes — first useful app |
 | M6 | Biometric unlock | Closed | Yes |
