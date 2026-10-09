@@ -139,6 +139,10 @@ Not in M4: entries (M5), biometric (M6), autofill (M7).
 | 13 | Screenshots | Try on list / detail / edit / generator / dialogs | All blocked |
 
 ## M6 device tests (fingerprint unlock)
+First the automated K_bio tests (needs an enrolled fingerprint; skipped otherwise):
+`./gradlew :core:crypto:connectedDebugAndroidTest --no-configuration-cache` → `BiometricKeyTest` 5/5
+(hardware-backed, biometric per use, invalidated by enrolment, unusable without the prompt).
+
 | # | Test | How | Expect |
 |---|---|---|---|
 | 1 | Turn on | Settings → "unlock with fingerprint · Off" → PIN → touch sensor | Row shows **On**; wrong PIN here counts toward the 3 strikes |

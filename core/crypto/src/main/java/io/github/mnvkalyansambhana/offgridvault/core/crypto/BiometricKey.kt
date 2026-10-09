@@ -1,6 +1,7 @@
 package io.github.mnvkalyansambhana.offgridvault.core.crypto
 
 import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyInfo
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
 import android.security.keystore.StrongBoxUnavailableException
@@ -11,6 +12,7 @@ import java.security.UnrecoverableKeyException
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
+import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.GCMParameterSpec
 
 /**
@@ -87,6 +89,12 @@ class BiometricKey(private val alias: String = ALIAS) {
                 throw DecryptionFailedException()
             }
         }
+    }
+
+    /** Keystore's view of K_bio, for on-device tests only (no secret material). */
+    internal fun keyInfo(): KeyInfo? {
+        val key = load() ?: return null
+        return SecretKeyFactory.getInstance(key.algorithm, KEYSTORE).getKeySpec(key, KeyInfo::class.java) as KeyInfo
     }
 
     private inline fun init(block: (SecretKey) -> Unit) {

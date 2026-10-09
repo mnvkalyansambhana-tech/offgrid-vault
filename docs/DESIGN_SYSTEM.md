@@ -65,7 +65,10 @@ All three are OFL fonts from Google Fonts — **bundle them in the APK** (no dow
 | **FieldLabel + SharpInput** | Label style above; 46–52 dp input, radius 0, `inputBorder` → `ink` when focused, `coralDeep` on error |
 | **PinDots** | 6 squares 16 dp, filled `#FFFFFF` / empty 2 dp `#5A5A5A` border; error = `coral` border |
 | **Keypad** | 3×4 grid, gap 10, white keys with hairline; fingerprint key = mint PopButton; backspace flat |
-| **StatusStrip** | Full-width strip, label style: amber fill (warning) or coral outline (error) or mint outline (info on dark) |
+| **StatusStrip** | Full-width strip, label style: amber fill (warning) or coral outline (error) or mint outline (info on dark). On PIN screens (`PinEntryScreen`): coral outline = wrong PIN / can't open (dots turn coral); **amber fill, ink text = notice** (e.g. "fingerprint unlock was turned off", M6) — dots stay neutral |
+| **SelectableRow** | Picker rows (autofill "Search vault…", save-screen account picker): min 52–60 dp, title `BodyStrong` + secondary line; selected = `card` bg + 1.5 dp `ink` border + green ✓; unselected in lists = 1 dp `paperHairline` |
+| **Checkbox** | 22 dp square, 1.5 dp `ink` border; checked = `ink` fill + mint ✓ (e.g. "Remember for this app", S15) |
+| **SettingsRow** | 52 dp min, `BodyStrong` text + optional secondary line, optional status chip (green text = on/set up; amber fill = needs attention, P20), `›` when tappable |
 | **CountdownBar** | 3 dp `mint` line under revealed password, shrinks over 20 s (S10) |
 | **Monogram** | 44 dp square, 1.5 dp `ink` border, Fraunces lowercase initial |
 | **Toast** | PopButton-shaped `ink` bar, label style, e.g. "COPIED · CLIPBOARD CLEARS IN 30S" |
@@ -80,5 +83,12 @@ Setup: Welcome · Create PIN · Recovery intro · Recovery words · Type-back ch
 Unlock: Unlock · Wrong PIN · Locked out · Enter recovery words
 Vault: Vault list · Entry detail · Edit entry · Generator · Delete · Settings
 Autofill: Locked suggestion · Matches · Link app (no match) · Save login
+
+Added after the lock, by decision (built from the same components, no new mockups):
+- **Settings → About & privacy** (P20 request): Privacy / Open source / App groups.
+- **Fingerprint unlock** (M6): PIN confirm → "touch the sensor." → saving.
+- **Autofill locked-out notice** (S3/S16): "vault locked." + Open OffGrid Vault.
+- **Save login account picker** (P23): "Or update a saved account" list under the save card.
+- **Vault list search** (P22): hidden behind the search icon.
 
 Placeholders in the mockups (`[word]`, `[Bank]`, `[N]`) are not copy.

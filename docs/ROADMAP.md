@@ -16,9 +16,9 @@ Rules for every milestone:
 | M3 | Setup & PIN unlock (happy path) ✅ *code done 2026-10-05 — 70 JVM tests pass; awaiting device tests + S21 lab result* | Internal | Yes |
 | M4 | Lockout, recovery & session ✅ *code done 2026-10-06 — 88 JVM tests pass; awaiting device tests* | Internal | Yes |
 | M5 | Vault MVP (entries, reveal, copy, generator) ✅ *done 2026-10-06 — 105 JVM tests pass, Pixel 9a device test passed; closed test moved to after M9 (P21)* | Internal | Yes — first useful app |
-| M6 | Biometric unlock ✅ *code done 2026-10-06 — 110 JVM tests pass; awaiting device tests* | Closed | Yes |
+| M6 | Biometric unlock ✅ *code done 2026-10-06 — 110 JVM tests pass; awaiting device tests; pushed `107932c`* | Closed | Yes |
 | M7 | Autofill — fill ✅ *code done 2026-10-06 — awaiting device tests* | Closed | Yes |
-| M8 | Autofill — save new logins ✅ *code done 2026-10-06 — 126 JVM tests pass (34 crypto, 78 vault, 14 autofill); awaiting device tests* | Closed | Yes |
+| M8 | Autofill — save new logins ✅ *code done 2026-10-06 — 127 JVM tests pass (34 crypto, 78 vault, 15 autofill; incl. P23); awaiting device tests* | Closed | Yes |
 | M9 | Hardening & production launch 🟡 *code done 2026-10-06 (S25, signing config, release docs); open: device tests, S21, trademark, closed test* | **Closed test (14 days, P21) → Production** | Yes |
 
 > **Personal Play account (P13):** production access requires a closed test with a minimum number of testers for 14 continuous days (check current numbers in Play Console). ~~Clock starts at M5~~ — per **P21** the closed test starts after M9; recruit testers before M9 ends so the 14 days begin immediately.
@@ -182,7 +182,7 @@ Ship: closed test update.
 Scope
 - `setAccessibilityDataSensitive` on secret views (S25).
 - Full `security-review` pass across the codebase; threat model re-read vs implementation.
-- Final S21 decision applied; PSL refreshed; dependency audit.
+- Final S21 decision applied; PSL refreshed (2026-10-01 list, M7); dependency audit → `docs/DEPENDENCY_AUDIT.md` (2026-10-09: 0 advisories, rerun with `tools/osv_audit.py`).
 - Store listing, privacy policy (no data collected), "OffGrid" trademark/Play name check (P8). Drafts: `docs/PLAY_LISTING.md`, `docs/PRIVACY_POLICY.md`; steps: `docs/RELEASE.md`.
 - Closed-test requirement met → apply for production.
 
