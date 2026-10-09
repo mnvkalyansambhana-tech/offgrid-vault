@@ -34,12 +34,17 @@ import io.github.mnvkalyansambhana.offgridvault.ui.theme.OffGridColors
 import io.github.mnvkalyansambhana.offgridvault.ui.theme.OffGridType
 
 /**
- * "Pop · Settings". Fingerprint (M6) and Autofill (M7) rows appear when those milestones land.
+ * "Pop · Settings".
  * No donation/payment links, ever (CLAUDE.md hard constraint, P3).
  */
 @Composable
 fun SettingsScreen(
     hasRecoveryWords: Boolean,
+    /** null = this phone has no strong biometric and fingerprint unlock is off: row hidden. */
+    fingerprintOn: Boolean?,
+    onFingerprintToggle: () -> Unit,
+    autofillOn: Boolean,
+    onAutofill: () -> Unit,
     onBack: () -> Unit,
     onChangePin: () -> Unit,
     onSetUpRecovery: () -> Unit,
@@ -59,6 +64,16 @@ fun SettingsScreen(
                 statusBackground = if (hasRecoveryWords) null else OffGridColors.Amber,
                 onClick = if (hasRecoveryWords) null else onSetUpRecovery,
             )
+            if (fingerprintOn != null) {
+                Divider()
+                SettingsRow(
+                    text = "unlock with fingerprint",
+                    subtext = "turned off after 3 wrong PINs",
+                    status = if (fingerprintOn) "On" else "Off",
+                    statusColor = if (fingerprintOn) OffGridColors.Green else OffGridColors.TextOnLight2,
+                    onClick = onFingerprintToggle,
+                )
+            }
             Divider()
             SettingsRow(text = "change PIN", onClick = onChangePin)
             Divider()
@@ -66,6 +81,17 @@ fun SettingsScreen(
         }
         if (!hasRecoveryWords) {
             Body("Without recovery words, forgetting your PIN locks this vault for good.", color = OffGridColors.TextOnLight2)
+        }
+        Spacer(Modifier.height(8.dp))
+        Label("Autofill", style = OffGridType.LabelSmall)
+        Group {
+            SettingsRow(
+                text = "fill passwords in other apps",
+                subtext = if (autofillOn) "OffGrid Vault is your autofill service" else "choose OffGrid Vault in Android settings",
+                status = if (autofillOn) "On" else "Off",
+                statusColor = if (autofillOn) OffGridColors.Green else OffGridColors.TextOnLight2,
+                onClick = onAutofill,
+            )
         }
         Spacer(Modifier.height(8.dp))
         Label("App", style = OffGridType.LabelSmall)
@@ -125,6 +151,7 @@ private fun Divider() {
 private fun SettingsRow(
     text: String,
     onClick: (() -> Unit)?,
+    subtext: String? = null,
     status: String? = null,
     statusColor: Color = OffGridColors.TextOnLight2,
     statusBackground: Color? = null,
@@ -137,7 +164,10 @@ private fun SettingsRow(
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Body(text, style = OffGridType.BodyStrong, modifier = Modifier.weight(1f))
+        Column(Modifier.weight(1f).padding(vertical = 8.dp)) {
+            Body(text, style = OffGridType.BodyStrong)
+            if (subtext != null) Body(subtext, color = OffGridColors.TextOnLight2)
+        }
         if (status != null) {
             Box(Modifier.then(if (statusBackground != null) Modifier.background(statusBackground) else Modifier).padding(horizontal = 8.dp, vertical = 4.dp)) {
                 Label(status, color = statusColor, style = OffGridType.LabelSmall)

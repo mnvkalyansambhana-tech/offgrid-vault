@@ -100,6 +100,36 @@ class VaultContent private constructor(
         return VaultContent(sessionKey, others + updated)
     }
 
+    /**
+     * P11 autofill save of a new password for an existing entry: everything else is kept and the
+     * old password goes to history (C15). Unchanged password → same content.
+     */
+    fun updatePassword(id: String, password: ByteArray, nowMillis: Long): VaultContent {
+        val e = entry(id) ?: return this
+        if (!passwordChanged(e, password)) return this
+        val history = if (e.password.isEmpty) e.history else (listOf(HistoryView(e.password, nowMillis)) + e.history).take(MAX_HISTORY)
+        val updated = EntryView(e.id, e.title, e.username, e.urls, e.linkedApps, seal(password), e.notes, history, e.createdAtMillis, nowMillis)
+        return VaultContent(sessionKey, entries.map { if (it.id == id) updated else it })
+    }
+
+    /** Whether [password] equals the stored one (P11: nothing to save). */
+    fun hasPassword(id: String, password: ByteArray): Boolean = entry(id)?.let { !passwordChanged(it, password) } ?: false
+
+    /**
+     * S15 "Remember for this app": pins [link] (package + signing cert) on entry [id]. A previous
+     * link for the same package is replaced (the cert changed and the user re-linked, S13).
+     */
+    fun linkApp(id: String, link: LinkedApp, nowMillis: Long): VaultContent = VaultContent(
+        sessionKey,
+        entries.map { e ->
+            if (e.id != id) e else EntryView(
+                e.id, e.title, e.username, e.urls,
+                e.linkedApps.filter { it.package_name != link.package_name } + link,
+                e.password, e.notes, e.history, e.createdAtMillis, nowMillis,
+            )
+        },
+    )
+
     /** P12: gone for good (save it as a sensitive save, C18). */
     fun delete(id: String): VaultContent = VaultContent(sessionKey, entries.filter { it.id != id })
 

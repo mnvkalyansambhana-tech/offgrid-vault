@@ -1,5 +1,6 @@
 package io.github.mnvkalyansambhana.offgridvault.ui.vault
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -23,13 +24,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,6 +65,14 @@ fun VaultHomeScreen(
     val state by session.state.collectAsState()
     val unlocked = state as? VaultSession.State.Unlocked ?: return
     var query by rememberSaveable { mutableStateOf("") }
+    // P22: search hides behind an icon; tapping it expands the field and opens the keyboard.
+    var searching by rememberSaveable { mutableStateOf(false) }
+    val searchFocus = remember { FocusRequester() }
+    val closeSearch = {
+        searching = false
+        query = ""
+    }
+    BackHandler(enabled = searching, onBack = closeSearch)
     var noticeDismissed by rememberSaveable { mutableStateOf(false) }
     val entries = unlocked.content.search(query)
 
@@ -70,6 +83,11 @@ fun VaultHomeScreen(
                 label = "${unlocked.content.entries.size} logins",
                 navigation = {
                     Spacer(Modifier.weight(1f))
+                    if (searching) {
+                        IconButton(OffGridIcon.Close, "Close search", closeSearch)
+                    } else {
+                        IconButton(OffGridIcon.Search, "Search", { searching = true })
+                    }
                     IconButton(OffGridIcon.Lock, "Lock now", onLock)
                     // P20: the only reminder for missing recovery words on this screen.
                     IconButton(OffGridIcon.Gear, "Settings", onSettings, badge = !hasRecovery(unlocked.header))
@@ -86,7 +104,17 @@ fun VaultHomeScreen(
                 }
             }
             LazyColumn(Modifier.weight(1f).fillMaxWidth(), contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp)) {
-                item { SharpInput(value = query, onValueChange = { query = it }, label = "Search", modifier = Modifier.fillMaxWidth()) }
+                if (searching) {
+                    item {
+                        SharpInput(
+                            value = query,
+                            onValueChange = { query = it },
+                            label = "Search title, username or website",
+                            modifier = Modifier.fillMaxWidth().focusRequester(searchFocus),
+                        )
+                        LaunchedEffect(Unit) { searchFocus.requestFocus() }
+                    }
+                }
                 if (entries.isEmpty()) {
                     item {
                         Body(

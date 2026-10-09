@@ -50,6 +50,9 @@ class VaultKeys(private val argon2: Argon2id, private val device: DeviceSealer) 
     /** Whether recovery words were set up for this vault (S28). */
     fun hasRecovery(header: VaultHeader): Boolean = header.wrapped_key_recovery.size > 0
 
+    /** Whether fingerprint unlock is on (S2). The copy itself is sealed by K_bio, see [BiometricEnrollment]. */
+    fun hasBiometric(header: VaultHeader): Boolean = header.wrapped_key_bio.size > 0
+
     private fun wrap(dek: ByteArray, kek: ByteArray, label: ByteArray, salt: ByteArray): ByteArray {
         val inner = try {
             AesGcm.encrypt(kek, dek, label + salt)
@@ -75,8 +78,10 @@ class VaultKeys(private val argon2: Argon2id, private val device: DeviceSealer) 
             inner.wipe()
         }
 
-    private companion object {
-        val PIN_LABEL = "offgrid-vault/v1/wrap/pin".toByteArray(Charsets.US_ASCII)
-        val RECOVERY_LABEL = "offgrid-vault/v1/wrap/recovery".toByteArray(Charsets.US_ASCII)
+    companion object {
+        /** Associated data for the K_bio copy of the DEK (single layer: K_bio is already device-bound). */
+        val BIO_LABEL: ByteArray get() = "offgrid-vault/v1/wrap/bio".toByteArray(Charsets.US_ASCII)
+        private val PIN_LABEL = "offgrid-vault/v1/wrap/pin".toByteArray(Charsets.US_ASCII)
+        private val RECOVERY_LABEL = "offgrid-vault/v1/wrap/recovery".toByteArray(Charsets.US_ASCII)
     }
 }

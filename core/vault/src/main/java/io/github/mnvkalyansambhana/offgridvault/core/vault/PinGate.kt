@@ -1,6 +1,7 @@
 package io.github.mnvkalyansambhana.offgridvault.core.vault
 
 import io.github.mnvkalyansambhana.offgridvault.core.crypto.DeviceKeyUnavailableException
+import io.github.mnvkalyansambhana.offgridvault.core.crypto.wipe
 import io.github.mnvkalyansambhana.offgridvault.core.vault.VaultRepository.OpenResult
 import io.github.mnvkalyansambhana.offgridvault.core.vault.proto.VaultHeader
 
@@ -23,6 +24,8 @@ class PinGate(
         data object NoVault : UnlockResult
         data object Unreadable : UnlockResult
         data object DeviceKeyLost : UnlockResult
+        /** The fingerprint copy didn't open this vault (stale or damaged): turn it off, use the PIN. */
+        data object BiometricRejected : UnlockResult
     }
 
     sealed interface VerifyResult {
@@ -59,6 +62,34 @@ class PinGate(
                 attempts.restore(before)
                 UnlockResult.Unreadable
             }
+        }
+    }
+
+    /**
+     * Fingerprint unlock (S2, S3, S12). [dek] was just unwrapped by K_bio after a successful
+     * biometric prompt; this takes ownership and wipes it. Blocked once PIN attempts are exhausted
+     * (S3); a success resets the wrong-PIN counter like a correct PIN.
+     */
+    fun unlockWithBiometric(dek: ByteArray): UnlockResult {
+        try {
+            if (!repository.hasVault()) return UnlockResult.NoVault
+            if (attempts.isLockedOut()) return UnlockResult.LockedOut
+            val before = attempts.failures()
+            // The DEK never changes for a vault, so it also opens vault.prev if needed (C18).
+            return when (val result = repository.open { dek.copyOf() }) {
+                is OpenResult.Opened -> {
+                    attempts.reset()
+                    UnlockResult.Unlocked(result, previousFailures = before)
+                }
+                OpenResult.NoVault -> UnlockResult.NoVault
+                // A wrong DEK looks like a damaged payload to the repository. Send the user to the
+                // PIN, which reports a genuinely damaged file properly.
+                OpenResult.Rejected -> UnlockResult.BiometricRejected
+                is OpenResult.Unreadable ->
+                    if (result.newerFormatVersion != null) UnlockResult.Unreadable else UnlockResult.BiometricRejected
+            }
+        } finally {
+            dek.wipe()
         }
     }
 

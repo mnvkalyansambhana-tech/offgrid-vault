@@ -73,6 +73,7 @@ All three are OFL fonts from Google Fonts — **bundle them in the APK** (no dow
 
 ## 6. Iconography
 Stroke icons, 1.8–2 dp, **square caps/joins** (matches sharp corners). 18–22 dp in 44 dp targets. No emoji.
+Set (`ui/components/Icons.kt`): lock, gear (toothed wheel, P20 amber badge dot), search (P22), eye, copy, back, edit, trash, close, refresh, fingerprint. Vault hero: search · lock · gear; while searching, search becomes close.
 
 ## 7. Screen inventory (locked)
 Setup: Welcome · Create PIN · Recovery intro · Recovery words · Type-back check · Words can/can't

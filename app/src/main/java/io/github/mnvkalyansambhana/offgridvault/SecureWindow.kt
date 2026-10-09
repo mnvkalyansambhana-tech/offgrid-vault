@@ -1,6 +1,7 @@
 package io.github.mnvkalyansambhana.offgridvault
 
 import android.app.Activity
+import android.os.Build
 import android.view.View
 import android.view.WindowManager
 
@@ -19,5 +20,11 @@ object SecureWindow {
         root.importantForAutofill = View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS
         // Tapjacking: ignore touches while another app's window is drawn over ours.
         root.filterTouchesWhenObscured = true
+        // S25 (API 34+): only real accessibility tools (TalkBack, Switch Access…) may read our
+        // views; other accessibility services see nothing. Set on the root, it covers every
+        // screen — in a password manager almost everything on screen is sensitive.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            root.setAccessibilityDataSensitive(View.ACCESSIBILITY_DATA_SENSITIVE_YES)
+        }
     }
 }

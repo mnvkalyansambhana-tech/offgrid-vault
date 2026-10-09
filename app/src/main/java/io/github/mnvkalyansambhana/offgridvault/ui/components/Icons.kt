@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import io.github.mnvkalyansambhana.offgridvault.ui.theme.OffGridColors
 
 /** Stroke icons with square caps (DESIGN_SYSTEM §6), drawn on a 24-unit grid. No emoji. */
-enum class OffGridIcon { Lock, Gear, Eye, Copy, Back, Edit, Trash, Close, Refresh }
+enum class OffGridIcon { Lock, Gear, Eye, Copy, Back, Edit, Trash, Close, Refresh, Fingerprint, Search }
 
 @Composable
 fun IconButton(
@@ -108,6 +108,20 @@ fun Icon(icon: OffGridIcon, tint: Color, modifier: Modifier = Modifier) {
             }
             OffGridIcon.Close -> {
                 line(6f to 6f, 18f to 18f); line(18f to 6f, 6f to 18f)
+            }
+            OffGridIcon.Fingerprint -> {
+                // Nested ridges (design/screens/pop/PopUnlock fingerprint key).
+                drawArc(tint, 180f, 180f, false, topLeft = p(4f, 2f), size = Size(16f * u, 16f * u), style = stroke)
+                line(4f to 10f, 4f to 13f); line(20f to 10f, 20f to 13f)
+                drawArc(tint, 180f, 180f, false, topLeft = p(7f, 6f), size = Size(10f * u, 10f * u), style = stroke)
+                line(17f to 11f, 17f to 13f)
+                line(12f to 11f, 12f to 15f, 10.5f to 19f)
+                line(8f to 15f, 7.5f to 19f)
+                line(16f to 15f, 15.2f to 19.5f)
+            }
+            OffGridIcon.Search -> {
+                drawCircle(tint, radius = 6.5f * u, center = p(10.5f, 10.5f), style = stroke)
+                line(15.5f to 15.5f, 20.5f to 20.5f)
             }
             OffGridIcon.Refresh -> {
                 drawArc(tint, -40f, 300f, false, topLeft = p(4f, 4f), size = Size(16f * u, 16f * u), style = stroke)

@@ -12,6 +12,15 @@
          Normal permission: no runtime dialog, no network. -->
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
 
+    <!-- S32: lets the autofill service read the signing cert of the app being filled (S13).
+         Launcher apps only; no QUERY_ALL_PACKAGES. -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+    </queries>
+
     <!-- allowBackup=false + fullBackupContent block backup up to Android 11. dataExtractionRules
          is required on Android 12+, where allowBackup=false does NOT stop
          device-to-device transfer. hasFragileUserData=false: uninstall never offers
@@ -39,5 +48,29 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- T21: autofill unlock / "Search vault…" / save. Started only by the autofill system
+             through our own PendingIntents: not exported, own task, never in recents. -->
+        <activity
+            android:name=".AutofillActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:noHistory="false"
+            android:taskAffinity=""
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- M7: only the system (BIND_AUTOFILL_SERVICE) can bind it. -->
+        <service
+            android:name="io.github.mnvkalyansambhana.offgridvault.autofill.OffGridAutofillService"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_AUTOFILL_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.autofill.AutofillService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.autofill"
+                android:resource="@xml/autofill_service" />
+        </service>
     </application>
 </manifest>

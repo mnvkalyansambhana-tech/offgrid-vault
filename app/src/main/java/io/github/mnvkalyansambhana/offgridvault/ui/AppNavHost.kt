@@ -1,10 +1,18 @@
 package io.github.mnvkalyansambhana.offgridvault.ui
 
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -23,15 +31,20 @@ import io.github.mnvkalyansambhana.offgridvault.ui.setup.SetupViewModel
 import io.github.mnvkalyansambhana.offgridvault.ui.unlock.LockedOutScreen
 import io.github.mnvkalyansambhana.offgridvault.ui.unlock.UnlockScreen
 import io.github.mnvkalyansambhana.offgridvault.ui.unlock.UnlockViewModel
+import io.github.mnvkalyansambhana.offgridvault.ui.vault.AboutScreen
 import io.github.mnvkalyansambhana.offgridvault.ui.vault.ChangePinScreen
 import io.github.mnvkalyansambhana.offgridvault.ui.vault.ChangePinViewModel
 import io.github.mnvkalyansambhana.offgridvault.ui.vault.EntryDetailScreen
 import io.github.mnvkalyansambhana.offgridvault.ui.vault.EntryDetailViewModel
 import io.github.mnvkalyansambhana.offgridvault.ui.vault.EntryEditScreen
 import io.github.mnvkalyansambhana.offgridvault.ui.vault.EntryEditViewModel
-import io.github.mnvkalyansambhana.offgridvault.ui.vault.AboutScreen
+import io.github.mnvkalyansambhana.offgridvault.ui.vault.FingerprintSetupScreen
+import io.github.mnvkalyansambhana.offgridvault.ui.vault.FingerprintSetupViewModel
 import io.github.mnvkalyansambhana.offgridvault.ui.vault.SettingsScreen
 import io.github.mnvkalyansambhana.offgridvault.ui.vault.VaultHomeScreen
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 private object Routes {
     const val SETUP = "setup"
@@ -44,6 +57,7 @@ private object Routes {
     const val ERASE = "erase"
     const val SETTINGS = "settings"
     const val ABOUT = "about"
+    const val FINGERPRINT = "fingerprint"
     const val ENTRY = "entry/{id}"
     const val EDIT = "edit/{id}"
     const val NEW_ENTRY_ID = "new"
@@ -52,7 +66,7 @@ private object Routes {
     fun edit(id: String?) = "edit/${id ?: NEW_ENTRY_ID}"
 
     /** Screens that show or change vault content: leave them the moment the session locks. */
-    val NEEDS_UNLOCKED = setOf(VAULT, RECOVERY_LATER, CHANGE_PIN, SETTINGS, ABOUT, ENTRY, EDIT)
+    val NEEDS_UNLOCKED = setOf(VAULT, RECOVERY_LATER, CHANGE_PIN, SETTINGS, ABOUT, FINGERPRINT, ENTRY, EDIT)
 }
 
 /** Single-activity navigation (T3). Destinations replace the back stack: no going "back" past a lock. */
@@ -132,8 +146,30 @@ fun AppNavHost(app: AppContainer) {
         composable(Routes.SETTINGS) {
             val state by app.session.state.collectAsState()
             val unlocked = state as? VaultSession.State.Unlocked
+            val fingerprintOn = unlocked?.let { app.keys.hasBiometric(it.header) } ?: false
+            val scope = rememberCoroutineScope()
+            val context = LocalContext.current
+            var autofillOn by remember { mutableStateOf(app.isAutofillService()) }
+            LifecycleResumeEffect(Unit) {
+                autofillOn = app.isAutofillService() // the user may come back from Android settings
+                onPauseOrDispose {}
+            }
             SettingsScreen(
                 hasRecoveryWords = unlocked?.let { app.keys.hasRecovery(it.header) } ?: true,
+                fingerprintOn = fingerprintOn.takeIf { it || app.hasStrongBiometric() },
+                onFingerprintToggle = {
+                    if (fingerprintOn) scope.launch { withContext(Dispatchers.IO) { app.turnOffFingerprint() } }
+                    else nav.navigate(Routes.FINGERPRINT)
+                },
+                autofillOn = autofillOn,
+                onAutofill = {
+                    val intent = if (autofillOn) {
+                        Intent(Settings.ACTION_SETTINGS) // to switch away: Passwords & autofill
+                    } else {
+                        Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE, Uri.parse("package:${context.packageName}"))
+                    }
+                    runCatching { context.startActivity(intent) }
+                },
                 onBack = { nav.popBackStack() },
                 onChangePin = { nav.navigate(Routes.CHANGE_PIN) },
                 onSetUpRecovery = { nav.navigate(Routes.RECOVERY_LATER) },
@@ -143,6 +179,10 @@ fun AppNavHost(app: AppContainer) {
                 },
                 onAbout = { nav.navigate(Routes.ABOUT) },
             )
+        }
+        composable(Routes.FINGERPRINT) {
+            val vm = viewModel { FingerprintSetupViewModel(app) }
+            FingerprintSetupScreen(vm, onDone = { nav.popBackStack() }, onCancel = { nav.popBackStack() })
         }
         composable(Routes.ABOUT) { AboutScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.RECOVERY_LATER) {

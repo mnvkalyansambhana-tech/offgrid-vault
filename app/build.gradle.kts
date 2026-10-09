@@ -1,10 +1,18 @@
 import com.android.build.api.artifact.SingleArtifact
 import io.github.mnvkalyansambhana.offgridvault.build.CheckNativeLibAlignment
 import io.github.mnvkalyansambhana.offgridvault.build.CheckNoInternetPermission
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+}
+
+// Release signing (M9): the upload key and its passwords live OUTSIDE the repo. Create
+// keystore.properties at the repo root (git-ignored), see docs/RELEASE.md. Without it the
+// release build is simply unsigned (CI).
+val uploadKey = rootProject.file("keystore.properties").takeIf { it.exists() }?.let { file ->
+    Properties().apply { file.inputStream().use(::load) }
 }
 
 android {
@@ -23,6 +31,17 @@ android {
         ndk { abiFilters += setOf("arm64-v8a", "armeabi-v7a", "x86_64") }
     }
 
+    signingConfigs {
+        if (uploadKey != null) {
+            create("upload") {
+                storeFile = file(uploadKey.getProperty("storeFile"))
+                storePassword = uploadKey.getProperty("storePassword")
+                keyAlias = uploadKey.getProperty("keyAlias")
+                keyPassword = uploadKey.getProperty("keyPassword")
+            }
+        }
+    }
+
     buildTypes {
         debug {
             // Debug builds install side by side with the Play build and get their own vault.
@@ -30,6 +49,7 @@ android {
             versionNameSuffix = "-debug"
         }
         release {
+            signingConfig = signingConfigs.findByName("upload")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")

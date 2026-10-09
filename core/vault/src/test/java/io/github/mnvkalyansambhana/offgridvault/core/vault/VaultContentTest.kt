@@ -2,7 +2,9 @@ package io.github.mnvkalyansambhana.offgridvault.core.vault
 
 import io.github.mnvkalyansambhana.offgridvault.core.crypto.AeadKey
 import io.github.mnvkalyansambhana.offgridvault.core.crypto.AesGcm
+import io.github.mnvkalyansambhana.offgridvault.core.vault.proto.LinkedApp
 import io.github.mnvkalyansambhana.offgridvault.core.vault.proto.Vault
+import okio.ByteString.Companion.toByteString
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -98,5 +100,31 @@ class VaultContentTest {
         val entry = content.entries.single()
         assertEquals("backup code 1234", String(content.reveal(entry.notes)))
         assertFalse(String(entry.notes.blob, Charsets.ISO_8859_1).contains("1234"))
+    }
+
+    @Test
+    fun linkApp_pinsPackageAndCert_relinkReplacesOldCert_survivesSave() {
+        val c = VaultContent.from(Vault(), sessionKey()).upsert(draft(null, "Bank", "pw"), 1)
+        val id = c.entries.single().id
+        val old = LinkedApp("com.bank.app", ByteArray(32) { 1 }.toByteString())
+        val new = LinkedApp("com.bank.app", ByteArray(32) { 2 }.toByteString())
+        val linked = c.linkApp(id, old, 2).linkApp(id, new, 3)
+        assertEquals(listOf(new), linked.entry(id)!!.linkedApps)
+        val reopened = VaultContent.from(linked.toVault(), sessionKey())
+        assertEquals(listOf(new), reopened.entry(id)!!.linkedApps)
+        assertEquals("pw", reopened.passwordOf(id))
+    }
+
+    @Test
+    fun updatePassword_keepsNotesAndLinks_pushesHistory_unchangedIsNoop() {
+        val c = VaultContent.from(Vault(), sessionKey()).upsert(draft(null, "Site", "old", notes = "n"), 1)
+        val id = c.entries.single().id
+        assertTrue(c.hasPassword(id, "old".toByteArray()))
+        assertTrue(c.updatePassword(id, "old".toByteArray(), 2) === c)
+        val updated = c.updatePassword(id, "new".toByteArray(), 3)
+        assertEquals("new", updated.passwordOf(id))
+        assertEquals("n", String(updated.reveal(updated.entry(id)!!.notes)))
+        assertEquals("old", String(updated.reveal(updated.entry(id)!!.history.single().password)))
+        assertFalse(updated.hasPassword(id, "old".toByteArray()))
     }
 }

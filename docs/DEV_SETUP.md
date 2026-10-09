@@ -133,7 +133,48 @@ Not in M4: entries (M5), biometric (M6), autofill (M7).
 | 7 | Clear history | CLEAR → confirm | History empty |
 | 8 | Notes | Add notes → save → open | Notes masked; eye reveals for 20 s |
 | 9 | Delete (P12) | Trash → confirm | Gone from the list; no recycle bin |
-| 10 | Search | Add 3 logins → type part of a title / username / website | List filters, case-insensitive |
+| 10 | Search (P22) | Add 3 logins → tap the search icon → type part of a title / username / website → ✕ | Field expands with keyboard; list filters, case-insensitive; ✕ / Back hides the field and shows all logins again |
 | 11 | Settings | Gear (toothed wheel) → recovery words / change PIN / lock now; App → about & privacy | Rows work; About shows Privacy (no internet, no data collected, stays on phone), Open source (GPL-3.0, repo), App (version) |
 | 12 | Restart | Force-stop → reopen → unlock | All logins still there |
 | 13 | Screenshots | Try on list / detail / edit / generator / dialogs | All blocked |
+
+## M6 device tests (fingerprint unlock)
+| # | Test | How | Expect |
+|---|---|---|---|
+| 1 | Turn on | Settings → "unlock with fingerprint · Off" → PIN → touch sensor | Row shows **On**; wrong PIN here counts toward the 3 strikes |
+| 2 | Unlock | Lock now → unlock screen | Fingerprint prompt opens by itself; touch → vault. "Use PIN" closes it; mint fingerprint key (bottom-left) reopens it |
+| 3 | Counter reset (S12) | 2 wrong PINs → unlock with fingerprint | Vault opens with "2 wrong PIN attempts since your last unlock"; next time you have 3 tries again |
+| 4 | Lockout (S3) | 3 wrong PINs | Locked-out screen; no fingerprint key/prompt anywhere until recovery words are used |
+| 5 | New fingerprint | Turn on → phone Settings → add a fingerprint → back to the app (lock first) | No prompt; amber notice "A fingerprint was added…"; PIN unlocks; Settings shows **Off**; turning it on again works |
+| 6 | Turn off | Settings → On → tap | **Off**; unlock screen has no fingerprint key |
+| 7 | No strong biometric | Phone with no fingerprint enrolled (or emulator without one) | Settings has no fingerprint row |
+| 8 | Erase (S30) | With fingerprint on → lockout → erase → set up again | New vault starts with fingerprint Off |
+
+## M7 device tests (autofill: fill) — dummy data only
+Turn it on first: Settings → Autofill → "fill passwords in other apps" → pick OffGrid Vault. In Chrome also set
+Chrome → Settings → Autofill services → "Autofill using another service" (Chrome restarts).
+| # | Test | How | Expect |
+|---|---|---|---|
+| 1 | Locked | Lock the vault → open any app's login screen → tap the username field | Only **Unlock OffGrid Vault** (keyboard strip or dropdown) — no entry names. Tap → PIN/fingerprint → suggestions appear |
+| 2 | Lockout (S3) | Lock out (3 wrong PINs) → tap Unlock in another app | "vault locked." screen → Open OffGrid Vault; no PIN pad |
+| 3 | Web match (S14) | Entry with website `github.com` → Chrome → github.com/login | Entry suggested; tap fills username + password |
+| 4 | Subdomain | Same entry → `gist.github.com` login | Suggested (same eTLD+1) |
+| 5 | Shared hosting | Entry `a.github.io` → open `b.github.io` | **Not** suggested |
+| 6 | App, no link | Any app's login (e.g. a test app) | Only **Search vault…** |
+| 7 | Remember (S15) | Search vault… → pick entry → tick Remember for this app → FILL | Fills; next time the entry is suggested directly in that app |
+| 8 | Look-alike (S13) | Optional: sideload a debug build of the same package with another signature | No suggestion |
+| 9 | Own app | Tap fields inside OffGrid Vault | No OffGrid suggestions; other autofill services can't save vault data |
+| 10 | Screenshots | Try on the autofill unlock / search screens | Blocked; not in recents |
+
+## M8 device tests (autofill: save new logins) — dummy data only
+| # | Test | How | Expect |
+|---|---|---|---|
+| 1 | Save from browser | Chrome → a login page not in the vault → type user + password → submit | Android asks "Save to OffGrid Vault?" → Save → our "save this login?" (unlock first if locked) → SAVE. New entry titled with the site (e.g. `example.com`), website = the host |
+| 2 | Save from app | Same in an app | Entry titled with the app's name, linked to the app (suggested there next time), no website |
+| 3 | Update | Log in again with a **new** password for a saved login | "update password?" → UPDATE; detail shows the new password and the old one in history |
+| 4 | Unchanged | Log in with the same password | Android may still ask; we show "already saved." |
+| 4b | Second account (P23) | Log in to the same app/site with a **different** username → save | "save this login?" (new entry); your other account is listed under "Or update a saved account" but not selected. After SAVE both accounts exist and both are suggested when filling |
+| 4c | Username not captured | If the app doesn't report the username: save | Still a **new** entry unless you pick an account to update |
+| 5 | Not now | Tap NOT NOW / back | Nothing saved |
+| 6 | Locked + lockout | Vault locked out → save from another app | "vault locked." → nothing saved |
+| 7 | Leave it | Accept Android's save prompt, then ignore our screen for > 5 min | The parked login is wiped; reopening does nothing |

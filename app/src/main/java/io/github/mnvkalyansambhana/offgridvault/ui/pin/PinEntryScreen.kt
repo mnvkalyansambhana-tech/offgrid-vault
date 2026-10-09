@@ -1,8 +1,10 @@
 package io.github.mnvkalyansambhana.offgridvault.ui.pin
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -36,13 +38,21 @@ fun PinEntryScreen(
     enabled: Boolean = true,
     linkText: String? = null,
     onLink: () -> Unit = {},
+    /** [message] is a notice (amber StatusStrip), not an error: the dots stay neutral. */
+    warning: Boolean = false,
+    /** Keypad's bottom-left key (the fingerprint key on unlock, M6). */
+    bottomLeft: (@Composable RowScope.() -> Unit)? = null,
 ) {
     TwoToneScreen(
         scrollable = false,
         hero = {
             HeroBand(headline = headline, label = label, supporting = supporting) {
-                PinDots(pinLength, error = message != null)
-                if (message != null) {
+                PinDots(pinLength, error = message != null && !warning)
+                if (message != null && warning) {
+                    Box(Modifier.fillMaxWidth().background(OffGridColors.Amber).padding(12.dp)) {
+                        Body(message, color = OffGridColors.Ink)
+                    }
+                } else if (message != null) {
                     Box(Modifier.fillMaxWidth().border(1.5.dp, OffGridColors.Coral).padding(12.dp)) {
                         Body(message, color = OffGridColors.TextOnDarkBody)
                     }
@@ -51,7 +61,7 @@ fun PinEntryScreen(
         },
     ) {
         Spacer(Modifier.weight(1f))
-        PinPad(onDigit = onDigit, onDelete = onDelete, enabled = enabled)
+        PinPad(onDigit = onDigit, onDelete = onDelete, enabled = enabled, bottomLeft = bottomLeft)
         if (linkText != null) {
             Box(
                 Modifier.fillMaxWidth().heightIn(min = 44.dp).clickable(role = Role.Button, onClick = onLink),

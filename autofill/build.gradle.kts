@@ -20,5 +20,8 @@ android {
 }
 
 dependencies {
+    api(project(":core:vault"))
+    implementation(libs.androidx.autofill)
+
     testImplementation(libs.junit)
 }

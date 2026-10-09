@@ -13,6 +13,8 @@
 *.aab
 *.keystore
 *.jks
+# Release upload-key passwords (docs/RELEASE.md)
+/keystore.properties
 # IDE
 .idea/
 *.iml

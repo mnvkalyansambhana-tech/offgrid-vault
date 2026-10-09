@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- M7, C12: inline suggestions in the keyboard strip; dropdown otherwise. -->
+<autofill-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:settingsActivity="io.github.mnvkalyansambhana.offgridvault.MainActivity"
+    android:supportsInlineSuggestions="true" />
